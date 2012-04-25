@@ -106,4 +106,43 @@ public class TestDependencies {
 	   String[] args = {"-", "src/test/ressources/BinaryObjectSet/toto.o","src/test/ressources/BinaryObjectSet/tata.o"};
 	   DotWriter.main(args);	
 	}
+	
+	@Test(groups = {"checkin"})
+	public void testNMBinaryComponent() throws Exception {
+		File toto = new File("src/test/ressources/BinaryObjectSet/toto.o");
+		File tata = new File("src/test/ressources/BinaryObjectSet/tata.o");
+	    Set<File> files = new HashSet<File>();
+	    files.add(toto);
+	    files.add(tata);
+	    BinaryComponent comp = new NMBinaryComponent("Comp", files);
+		System.out.println(comp);
+	}
+	
+	@Test(groups = {"checkin"})
+	public void testBinaryComponent() throws Exception {
+		File toto = new File("src/test/ressources/BinaryComponent/toto.o");
+		File tata = new File("src/test/ressources/BinaryComponent/tata.o");
+	    Set<File> files1 = new HashSet<File>();
+	    files1.add(toto);
+	    files1.add(tata);
+	    
+		File titi = new File("src/test/ressources/BinaryComponent/titi.o");
+		File tutu = new File("src/test/ressources/BinaryComponent/tutu.o");
+	    Set<File> files2 = new HashSet<File>();
+	    files2.add(titi);
+	    files2.add(tutu);
+	    
+	    BinaryComponent comp1 = new NMBinaryComponent("Comp1", files1);
+	    BinaryComponent comp2 = new NMBinaryComponent("Comp2", files2);
+
+	    BinaryObjectSet comps = new BinaryObjectSet();
+	    comps.add(comp1);
+	    comps.add(comp2);
+
+	    comps.resolve();
+	    
+		System.out.println(comp1);
+		System.out.println(comp2);
+	}
+	
 }
