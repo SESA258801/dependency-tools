@@ -49,7 +49,7 @@ public class NMBinaryObject extends BinaryObject {
 							// BSS symbol
 							type = Type.bss;
 							state=State.type;
-						} else if (f.matches("[DdGg]")) {
+						} else if (f.matches("[RrDdGg]")) {
 							// Data symbol
 							type = Type.data;
 							state=State.type;

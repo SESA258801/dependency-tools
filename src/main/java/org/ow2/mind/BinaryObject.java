@@ -19,6 +19,7 @@ import java.util.HashSet;
 abstract public class BinaryObject {
 
 	public String name;
+	public String source;
 	public Set<Symbol> defined = new HashSet<Symbol>();
 	public Map<Symbol,BinaryObject> undefined = new HashMap<Symbol,BinaryObject>();
 
