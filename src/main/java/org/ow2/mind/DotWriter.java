@@ -49,7 +49,7 @@ public class DotWriter {
 			}
 			BinaryObjectSet objs = new NMBinaryObjectSet(files);
 			objs.resolve();
-			CreateDotDependencyFile(objs, output);
+			objs.createDotDependencyFile(output);
 			output.close();
 			return;
 
@@ -57,18 +57,5 @@ public class DotWriter {
 			e.printStackTrace();
 			return;
 		}
-	}
-
-
-	static public void CreateDotDependencyFile(BinaryObjectSet objs, BufferedWriter out) throws IOException {
-		String NEW_LINE = System.getProperty("line.separator");
-		out.write("digraph {" + NEW_LINE );
-		for (BinaryObject from : objs){
-			for (BinaryObject to : from.undefined.values() ) {
-				if (to !=null) out.write(from.name.replace(".","_") + "->" + to.name.replace(".","_") + NEW_LINE );
-			}
-		}
-		out.write("}" + NEW_LINE );
-
 	}
 }

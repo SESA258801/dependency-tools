@@ -49,39 +49,13 @@ public class CamCSVWriter {
 			}
 			BinaryObjectSet objs = new NMBinaryObjectSet(files);
 			objs.resolve();
-			CreateCamCSVFile(objs, output);
+			objs.createCamCSVFile(output);
 			output.close();
 			return;
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
-		}
-	}
-
-
-	static public void CreateCamCSVFile(BinaryObjectSet objs, BufferedWriter out) throws IOException {
-		String NEW_LINE = System.getProperty("line.separator");
-		out.write("BINARY DSM EXPORTED FROM CAMBRIDGE ADVANCED MODELLER" + NEW_LINE  + NEW_LINE );
-		out.write("\"\",\"Hierachy ID\"");
-		for (int i=1; i <= objs.size(); i++) out.write(",\"" + i +"\"");
-		out.write( NEW_LINE );
-		int i = 0;
-		for (BinaryObject from : objs){
-			i++;
-			out.write("\"" + from.name + "\"," + "\"" + i + "\"");
-			for (BinaryObject to : objs ) {
-				boolean isWritten = false;
-				for (BinaryObject dep : from.undefined.values()) {
-					if (dep == to) {
-						out.write(",\"1\"");
-						isWritten = true;
-						break;
-					} 
-				}
-				if (isWritten == false)	out.write(",\"\"");
-			}
-			out.write( NEW_LINE );	
 		}
 	}
 }

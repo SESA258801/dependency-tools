@@ -1,6 +1,8 @@
 package org.ow2.mind;
 
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.HashSet;
 /**
  * 
@@ -56,6 +58,42 @@ public class BinaryObjectSet extends HashSet<BinaryObject> {
 			}
 		}
 		resolved = true;
+	}
+	
+	public void createDotDependencyFile(BufferedWriter out) throws IOException {
+		String NEW_LINE = System.getProperty("line.separator");
+		out.write("digraph {" + NEW_LINE );
+		for (BinaryObject from : this){
+			for (BinaryObject to : from.undefined.values() ) {
+				if (to !=null) out.write(from.name.replace(".","_") + "->" + to.name.replace(".","_") + NEW_LINE );
+			}
+		}
+		out.write("}" + NEW_LINE );
+	}
+	
+	public void createCamCSVFile(BufferedWriter out) throws IOException {
+		String NEW_LINE = System.getProperty("line.separator");
+		out.write("BINARY DSM EXPORTED FROM CAMBRIDGE ADVANCED MODELLER" + NEW_LINE  + NEW_LINE );
+		out.write("\"\",\"Hierachy ID\"");
+		for (int i=1; i <= this.size(); i++) out.write(",\"" + i +"\"");
+		out.write( NEW_LINE );
+		int i = 0;
+		for (BinaryObject from : this){
+			i++;
+			out.write("\"" + from.name + "\"," + "\"" + i + "\"");
+			for (BinaryObject to : this ) {
+				boolean isWritten = false;
+				for (BinaryObject dep : from.undefined.values()) {
+					if (dep == to) {
+						out.write(",\"1\"");
+						isWritten = true;
+						break;
+					} 
+				}
+				if (isWritten == false)	out.write(",\"\"");
+			}
+			out.write( NEW_LINE );	
+		}
 	}
 }	
 
