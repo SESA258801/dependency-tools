@@ -12,13 +12,24 @@ public class ProcessImplementationFileListing {
 		try {
 			components = new NMBinaryComponentSet(new File(args[0]));
 			components.resolve();
-			BufferedWriter out = new BufferedWriter(new FileWriter("comp.deps"));
+
+			BufferedWriter dot_out = new BufferedWriter(new FileWriter("comp.dot"));
+			components.createDotDependencyFile(dot_out);
+			dot_out.flush();
+			dot_out.close();
+			
+			BufferedWriter csv_out = new BufferedWriter(new FileWriter("csv.dot"));
+			components.createCamCSVFile(csv_out);
+			csv_out.flush();
+			csv_out.close();
+			
+			BufferedWriter text_out = new BufferedWriter(new FileWriter("comp.deps"));
 
 			for (BinaryObject comp : components) {
-				(out).write(comp.toString());				
+				(text_out).write(comp.toString());				
 			}
-			out.flush();
-			out.close();
+			text_out.flush();
+			text_out.close();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

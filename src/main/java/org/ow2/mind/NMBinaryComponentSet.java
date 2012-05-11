@@ -18,13 +18,15 @@ public class NMBinaryComponentSet extends BinaryObjectSet {
 				String[] token = line.split(" ");
 				int last = token.length -1;
 				Boolean added = false;
-				Runtime runtime = Runtime.getRuntime();
-				Process find = runtime.exec("find -name " + token[last]);
-				BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
-				String objAbsPath = input.readLine();
+//				Runtime runtime = Runtime.getRuntime();
+//				Process find = runtime.exec("find -name " + token[last]);
+//				BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
+//				String objAbsPath = input.readLine();
+				String objAbsPath = token[last];
 				
 				for (BinaryObject component : this) {
-					if (component.name.equals(token[0])) {
+					if (component.name.equals(token[0])) 
+					if ( objAbsPath != null ){
 						((NMBinaryComponent)component).add(new File(objAbsPath));
 						added=true;
 						break;
