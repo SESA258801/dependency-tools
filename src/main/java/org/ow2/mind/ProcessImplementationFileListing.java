@@ -18,7 +18,7 @@ public class ProcessImplementationFileListing {
 			dot_out.flush();
 			dot_out.close();
 			
-			BufferedWriter csv_out = new BufferedWriter(new FileWriter("csv.dot"));
+			BufferedWriter csv_out = new BufferedWriter(new FileWriter("comp.csv"));
 			components.createCamCSVFile(csv_out);
 			csv_out.flush();
 			csv_out.close();
@@ -26,7 +26,9 @@ public class ProcessImplementationFileListing {
 			BufferedWriter text_out = new BufferedWriter(new FileWriter("comp.deps"));
 
 			for (BinaryObject comp : components) {
-				(text_out).write(comp.toString());				
+				(text_out).newLine();
+				(text_out).write(comp.toString());
+				(text_out).newLine();
 			}
 			text_out.flush();
 			text_out.close();
