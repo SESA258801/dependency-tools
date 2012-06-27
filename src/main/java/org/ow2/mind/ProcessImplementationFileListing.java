@@ -12,6 +12,7 @@ public class ProcessImplementationFileListing {
 		try {
 			components = new NMBinaryComponentSet(new File(args[0]));
 			components.resolve();
+			components.stripInternalOnly();
 
 			BufferedWriter dot_out = new BufferedWriter(new FileWriter("comp.dot"));
 			components.createDotDependencyFile(dot_out);

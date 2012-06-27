@@ -4,6 +4,7 @@ package org.ow2.mind;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 /**
  * 
  * @author Julien TOUS
@@ -60,6 +61,27 @@ public class BinaryObjectSet extends HashSet<BinaryObject> {
 		resolved = true;
 	}
 	
+	/**
+	 * Remove defined symbols used only by the object (ie: not by other object from the set)
+	 * Beware that once this method has been called, striped symbols are totaly lost.
+	 * Use with care !
+	 */
+	public void stripInternalOnly() {
+		for (BinaryObject dobj : this ) {
+			Iterator<Symbol> dsyms = dobj.defined.iterator();
+			while (dsyms.hasNext()) {
+				Symbol dsym = dsyms.next();
+				boolean used = false;
+				for (BinaryObject uobj : this ) {
+					for (Symbol usym : uobj.undefined.keySet() ) {
+						if (dsym.name.equals(usym.name)) used=true;
+					}
+				}
+				if (used == false) dsyms.remove(); 
+			}
+		}
+	}
+
 	public void createDotDependencyFile(BufferedWriter out) throws IOException {
 		String NEW_LINE = System.getProperty("line.separator");
 		out.write("digraph {" + NEW_LINE );
