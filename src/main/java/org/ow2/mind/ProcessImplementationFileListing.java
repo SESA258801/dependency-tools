@@ -2,6 +2,7 @@ package org.ow2.mind;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -9,22 +10,25 @@ public class ProcessImplementationFileListing {
 	static NMBinaryComponentSet components = null;
 	
 	public static void main(String[] args) {
+		File file = new File(args[0]);
+		String name = file.getName().substring(0,file.getName().lastIndexOf("."));
+		String directory = file.getParentFile().getPath();
 		try {
-			components = new NMBinaryComponentSet(new File(args[0]));
+			components = new NMBinaryComponentSet(file);
 			components.resolve();
 			components.stripInternalOnly();
 
-			BufferedWriter dot_out = new BufferedWriter(new FileWriter("comp.dot"));
+			BufferedWriter dot_out = new BufferedWriter(new FileWriter( directory + File.separatorChar + name + "HidenDeps.dot"));
 			components.createDotDependencyFile(dot_out);
 			dot_out.flush();
 			dot_out.close();
 			
-			BufferedWriter csv_out = new BufferedWriter(new FileWriter("comp.csv"));
+			BufferedWriter csv_out = new BufferedWriter(new FileWriter( directory + File.separatorChar + name + "HidenDeps.csv"));
 			components.createCamCSVFile(csv_out);
 			csv_out.flush();
 			csv_out.close();
 			
-			BufferedWriter text_out = new BufferedWriter(new FileWriter("comp.deps"));
+			BufferedWriter text_out = new BufferedWriter(new FileWriter( directory + File.separatorChar + name + "HidenDeps.txt"));
 
 			for (BinaryObject comp : components) {
 				(text_out).newLine();
