@@ -13,11 +13,14 @@ public class ProcessImplementationFileListing {
 		File file = new File(args[0]);
 		String name = file.getName().substring(0,file.getName().lastIndexOf("."));
 		String directory = file.getParentFile().getPath();
-		try {
-			components = new NMBinaryComponentSet(file);
+			try {
+				components = new NMBinaryComponentSet(file);
+			} catch (FileNotFoundException e) {
+				System.out.println("File not found : " + file);
+			}
 			components.resolve();
 			components.stripInternalOnly();
-
+			try {
 			BufferedWriter dot_out = new BufferedWriter(new FileWriter( directory + File.separatorChar + name + "HidenDeps.dot"));
 			components.createDotDependencyFile(dot_out);
 			dot_out.flush();
@@ -39,8 +42,7 @@ public class ProcessImplementationFileListing {
 			text_out.close();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				
 		}
 	}
 }
