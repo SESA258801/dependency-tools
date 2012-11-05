@@ -86,8 +86,9 @@ public class BinaryObjectSet extends HashSet<BinaryObject> {
 		String NEW_LINE = System.getProperty("line.separator");
 		out.write("digraph {" + NEW_LINE );
 		for (BinaryObject from : this){
-			for (BinaryObject to : from.undefined.values() ) {
-				if (to !=null) out.write(from.name.replace(".","_") + "->" + to.name.replace(".","_") + NEW_LINE );
+			for (Symbol sym : from.undefined.keySet() ) {
+				BinaryObject to = from.undefined.get(sym);
+				if (to !=null) out.write(from.name.replace(".","_") + "->" + to.name.replace(".","_") + "[label=" + sym.name + "]" + NEW_LINE );
 			}
 		}
 		out.write("}" + NEW_LINE );
