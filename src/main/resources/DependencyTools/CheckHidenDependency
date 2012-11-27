@@ -1,0 +1,21 @@
+#!/bin/bash
+
+EXEC_NAME=$(basename $0)
+LISTING=$1
+
+function usage {
+ echo "Usage : $EXEC_NAME ImplementationOutputFiles.lst"
+ echo "Generate listing files of hiden dependencies between components from Mind output file listing :"
+ echo -e "\tHidenDeps.txt \"readable\" list of shared symbols."
+ echo -e "\tHidenDeps.dot hiden dependency graph in graphviz's dot format."
+ echo -e "\tHidenDeps.csv Dependency Structure Matrix suitable forimport by CAM."
+ exit -1
+}
+
+if [ $# -ne 1 ]
+then
+        usage
+fi
+
+
+java -cp $MIND_ROOT/lib/dependency-tools-*.jar org.ow2.mind.ProcessImplementationFileListing  $LISTING

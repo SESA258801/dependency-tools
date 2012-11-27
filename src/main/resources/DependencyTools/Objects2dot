@@ -1,0 +1,18 @@
+#!/bin/bash
+
+EXEC_NAME=$(basename $0)
+
+
+function usage {
+ echo "Usage : $EXEC_NAME output.dot file1.o ... fileN.o"
+ echo "Create a dot graph of dependency between object files"
+ exit -1
+}
+
+if [ $# -lt 2 ]
+then
+        usage
+fi
+
+
+java -cp $MIND_ROOT/lib/dependency-tools-*.jar org.ow2.mind.DotWriter $*
