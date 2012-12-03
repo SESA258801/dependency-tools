@@ -10,40 +10,71 @@ import java.io.InputStreamReader;
 public class NMBinaryComponentSet extends BinaryObjectSet {
 	private static final long serialVersionUID = 1L;
 
-	NMBinaryComponentSet(File lstFile) throws FileNotFoundException {
-		BufferedReader lst = new BufferedReader(new FileReader(lstFile));
-		String line;
+	NMBinaryComponentSet(File buildFolder) throws FileNotFoundException {
+		String buildFolderPath = buildFolder.getAbsolutePath();
+		String objAbsPath;
+		Runtime runtime = Runtime.getRuntime();
+		Process find;
+		String[] findCmd = {"find",buildFolderPath,"-name","*.o"};
 		try {
-			while((line = lst.readLine())!=null) {
-				String[] token = line.split(" ");
-				int last = token.length -1;
-				Boolean added = false;
-//				Runtime runtime = Runtime.getRuntime();
-//				Process find = runtime.exec("find -name " + token[last]);
-//				BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
-//				String objAbsPath = input.readLine();
-				String objAbsPath = token[last];
-				
-				for (BinaryObject component : this) {
-					if (component.name.equals(token[0])) 
-					if ( objAbsPath != null ){
-						((NMBinaryComponent)component).add(new File(objAbsPath));
-						added=true;
-						break;
+			find = runtime.exec(findCmd);
+			BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
+			while((objAbsPath = input.readLine())!=null) {
+				//Skipping instances
+				if ( !objAbsPath.contains("instances.mpp.o")) {
+					//Now dealing with definitions only
+					String objRelPath = objAbsPath.substring(buildFolderPath.length()+1);
+
+					int lastSlash=objRelPath.lastIndexOf(File.separatorChar);
+					String pkg;
+					if ( lastSlash == -1 ) {
+						pkg = "";
+					} else {
+						pkg = objRelPath.substring(0, lastSlash).replace(File.separatorChar, '.');
+					}
+
+					if (!pkg.equals("fractal.internal")) {
+						if (!objRelPath.startsWith("Factory_tmpl_", pkg.length())) {
+							String objName = objRelPath.substring(pkg.length()+1);
+							String[] underscored = objName.split("_");
+							int j = 0;
+							for (int i = underscored.length-1; i > 0; i--){
+								if (underscored[i].matches("impl[0-9]+")) j=i;
+								if (underscored[i].equals("ctrl")) j=i;
+							}
+							StringBuilder def = new StringBuilder();
+							for (int i = 0; i < j-1; i++) {
+								def.append(underscored[i]);
+								def.append("_");
+							}
+							def.append(underscored[j-1]);
+							String defName = def.toString();
+
+							Boolean added = false;
+
+
+							for (BinaryObject component : this) {
+								if (component.name.equals(defName))
+									if ( objAbsPath != null ){
+										((NMBinaryComponent)component).add(new File(objAbsPath));
+										added=true;
+										break;
+									}
+							}
+							if (!added) {
+								this.add(new NMBinaryComponent(defName, new File(objAbsPath)));
+								added=true;
+							}
+						}
 					}
 				}
-				if (!added) {
-					this.add(new NMBinaryComponent(token[0], new File(objAbsPath)));
-					added=true;
-				}
 			}
-			lst.close();
 			for (BinaryObject component : this) {
 				((NMBinaryComponent)component).resolve();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Trouble while running find !");
 			e.printStackTrace();
-		}			
+		}
 	}
 }

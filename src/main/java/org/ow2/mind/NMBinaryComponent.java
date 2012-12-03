@@ -57,10 +57,12 @@ public class NMBinaryComponent extends BinaryComponent {
 						}
 					} else if (type == Type.undef ) {
 						if (!f.contains("$"))
+						if (!f.startsWith("__component_")) //Strip mind defined symbols				
 							undefined.put(new Symbol(f, objName, type), null);
 						state=State.start;
 					} else if (type == Type.text || type == Type.data || type == Type.bss ) {
 						if (!f.contains("$"))
+						if (!f.startsWith("__component_")) //Strip mind defined symbols
 							defined.add(new Symbol(f, objName, type));
 						state=State.start;
 					}
