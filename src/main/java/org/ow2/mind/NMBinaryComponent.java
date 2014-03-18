@@ -19,11 +19,11 @@ import org.ow2.mind.Symbol.Type;
  */
 
 public class NMBinaryComponent extends BinaryComponent {
-	
+	public String nmPath = "nm";
 	public void add(File file) {
 		try {
 			Runtime runtime = Runtime.getRuntime();
-			Process nm = runtime.exec("nm " + file.getPath());
+			Process nm = runtime.exec(nmPath + " " + file.getPath());
 			BufferedReader input = new BufferedReader(new InputStreamReader(nm.getInputStream()));
 			String objName=file.getName();
 			String line;
@@ -54,6 +54,10 @@ public class NMBinaryComponent extends BinaryComponent {
 							// Data symbol
 							type = Type.data;
 							state=State.type;
+						} else if (f.matches("U")) {
+							// Undefined symbol
+							type=Type.undef;
+							state=State.type;
 						}
 					} else if (type == Type.undef ) {
 						if (!f.contains("$"))
@@ -75,7 +79,14 @@ public class NMBinaryComponent extends BinaryComponent {
 		}
 		resolved=false;
 	}
+	
+	
 	NMBinaryComponent(String CompName, File file) {
+		this(CompName,file,null);
+	}
+	NMBinaryComponent(String CompName, File file, String nmExecPath) {
+		if (nmExecPath != null)
+			nmPath = nmExecPath;
 		name = CompName;
 		add(file);
 		resolve();
@@ -83,6 +94,11 @@ public class NMBinaryComponent extends BinaryComponent {
 	}
 	
 	NMBinaryComponent(String CompName, Set<File> files) {
+		this(CompName,files,null);
+	}
+	NMBinaryComponent(String CompName, Set<File> files, String nmExecPath) {
+		if (nmExecPath != null)
+			nmPath = nmExecPath;
 		name = CompName;
 		for (File file : files) {
 			add(file);

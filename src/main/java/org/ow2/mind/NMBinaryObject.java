@@ -18,11 +18,13 @@ import org.ow2.mind.Symbol.Type;
 
 public class NMBinaryObject extends BinaryObject {
 	public enum State { start, addr, type } 
-
 	NMBinaryObject(File file) {
+		this(file, "nm");
+	}
+	NMBinaryObject(File file, String nmPath) {
 		try {
 			Runtime runtime = Runtime.getRuntime();
-			Process nm = runtime.exec("nm " + file.getPath());
+			Process nm = runtime.exec(nmPath + " " + file.getPath());
 			BufferedReader input = new BufferedReader(new InputStreamReader(nm.getInputStream()));
 			name=file.getName();
 			String line;
@@ -52,6 +54,14 @@ public class NMBinaryObject extends BinaryObject {
 						} else if (f.matches("[RrDdGg]")) {
 							// Data symbol
 							type = Type.data;
+							state=State.type;
+						} else if (f.matches("U")) { 
+							/* 
+							 * This case isn't usefull for gnu nm 
+							 * but at least is necessary for TI nm
+							 */
+							// Undefined symbol
+							type=Type.undef;
 							state=State.type;
 						}
 					} else if (type == Type.undef ) {

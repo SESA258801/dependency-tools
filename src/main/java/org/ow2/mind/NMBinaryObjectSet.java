@@ -17,4 +17,10 @@ public class NMBinaryObjectSet extends BinaryObjectSet {
 			add(new NMBinaryObject(f));
 		}
 	}
+
+	NMBinaryObjectSet(Set<File> files, String nmCommand) {
+		for (File f: files) {
+			add(new NMBinaryObject(f, nmCommand));
+		}
+	}
 }

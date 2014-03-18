@@ -19,13 +19,28 @@ import java.util.TreeSet;
  * Those should be defined into inherited class.
  * 
  */
-abstract public class BinaryObject {
+abstract public class BinaryObject implements IBinaryObject {
 
 	public String name;
 	public String source;
 	public Set<Symbol> defined = new HashSet<Symbol>();
 	public Map<Symbol,BinaryObject> undefined = new HashMap<Symbol,BinaryObject>();
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void addDefinedSymbol(Symbol definedSym) {
+		this.defined.add(definedSym);
+	}
+
+	public void addUndefinedSymbol(Symbol undefinedSym) {
+		this.undefined.put(undefinedSym,null);
+	}
 	
 	/**
 	 * resolveAgainst : try to resolve undefined symbols by comparing with another BinaryObject

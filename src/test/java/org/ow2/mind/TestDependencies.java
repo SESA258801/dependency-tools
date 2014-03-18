@@ -97,14 +97,14 @@ public class TestDependencies {
 	
 	@Test(groups = {"checkin"})
 	public void testCamCSVWriter() throws Exception {
-	   String[] args = {"-", "src/test/ressources/BinaryObjectSet/toto.o","src/test/ressources/BinaryObjectSet/tata.o"};
-	   CamCSVWriter.main(args);	
+	   String[] args = {"src/test/ressources/BinaryObjectSet/toto.o","src/test/ressources/BinaryObjectSet/tata.o", "--dsm=-"};
+	   ObjDepSolver.main(args);	
 	}
 	
 	@Test(groups = {"checkin"})
 	public void testDotWriter() throws Exception {
-	   String[] args = {"-", "src/test/ressources/BinaryObjectSet/toto.o","src/test/ressources/BinaryObjectSet/tata.o"};
-	   DotWriter.main(args);	
+	   String[] args = {"src/test/ressources/BinaryObjectSet/toto.o","src/test/ressources/BinaryObjectSet/tata.o", "--graph=-"};
+	   ObjDepSolver.main(args);	
 	}
 	
 	@Test(groups = {"checkin"})

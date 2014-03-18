@@ -3,29 +3,19 @@ package org.ow2.mind;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import java.util.ArrayList;
 
 public class NMBinaryComponentSet extends BinaryObjectSet {
 	private static final long serialVersionUID = 1L;
 
-	NMBinaryComponentSet(File buildFolder) throws FileNotFoundException {
+	NMBinaryComponentSet(File buildFolder, String nmCommand) throws FileNotFoundException {
 		String buildFolderPath = buildFolder.getAbsolutePath();
-		String objAbsPath;
-//		Runtime runtime = Runtime.getRuntime();
-//		Process find;
-//		String[] findCmd = {"find",buildFolderPath,"-name","*.o"};
-		String output;
 		try {
-			output=Find.find(Paths.get(buildFolderPath),"*.o");
-			//find = runtime.exec(findCmd);
-			//BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
-			BufferedReader input = new BufferedReader(new StringReader(output));
-			while((objAbsPath = input.readLine())!=null) {
+			String[] output=find(buildFolderPath,"*.o");
+			for (String objAbsPath : output) {
 				//Skipping instances
 				if ( !objAbsPath.contains("instances.")) {//Fixme instances should be permitted as a definition name
 					//Now dealing with definitions only
@@ -39,7 +29,11 @@ public class NMBinaryComponentSet extends BinaryObjectSet {
 					}
 					if (!pkg.equals("fractal.internal")) {
 						if (!objRelPath.startsWith("Factory_tmpl_", pkg.length())) {
-							String objName = objRelPath.substring(pkg.length()+1).split("\\.")[0];
+							String objName;
+							if (pkg.equals(""))
+								objName = objRelPath.substring(pkg.length()).split("\\.")[0];
+							else
+								objName = objRelPath.substring(pkg.length()+1).split("\\.")[0];
 							String[] underscored = objName.split("_");
 							int j = 0;
 							for (int i = underscored.length-1; i > 0; i--){
@@ -66,7 +60,7 @@ public class NMBinaryComponentSet extends BinaryObjectSet {
 									}
 							}
 							if (!added) {
-								this.add(new NMBinaryComponent(defName, new File(objAbsPath)));
+								this.add(new NMBinaryComponent(defName, new File(objAbsPath), nmCommand));
 								added=true;
 							}
 						}
@@ -81,4 +75,19 @@ public class NMBinaryComponentSet extends BinaryObjectSet {
 			e.printStackTrace();
 		}
 	}
+	
+	public String[] find(String path, String pattern) throws IOException{
+		String objAbsPath;
+		Runtime runtime = Runtime.getRuntime();
+		Process find;
+		ArrayList<String> files = new ArrayList<String>();
+		String[] findCmd = {"find", path,"-name","*.o"};
+		find = runtime.exec(findCmd);
+		BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
+		while((objAbsPath = input.readLine())!=null) {
+			files.add(objAbsPath);
+		}
+		return files.toArray(new String[files.size()]);
+	}
 }
+
