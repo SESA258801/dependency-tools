@@ -93,9 +93,8 @@ abstract public class BinaryObject implements IBinaryObject {
 		result.append("}");
 		return result.toString();
 	}
-}
 
-class UndefinedComparator implements Comparator<Symbol> {
+private class UndefinedComparator implements Comparator<Symbol> {
 
 	Map<Symbol,BinaryObject> base;
 	public UndefinedComparator(Map<Symbol,BinaryObject> base) {
@@ -118,7 +117,7 @@ class UndefinedComparator implements Comparator<Symbol> {
 	}
 }
 
-class DefinedComparator implements Comparator<Symbol> {
+private class DefinedComparator implements Comparator<Symbol> {
 
 	Set<Symbol> base;
 	public DefinedComparator(Set<Symbol> base) {
@@ -138,4 +137,5 @@ class DefinedComparator implements Comparator<Symbol> {
 		}
 		return a.name.compareTo( b.name );
 	}
+}
 }
