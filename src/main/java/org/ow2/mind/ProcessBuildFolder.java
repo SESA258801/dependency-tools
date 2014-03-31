@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.ow2.mind.cli.CmdArgument;
 import org.ow2.mind.cli.CmdFlag;
+import org.ow2.mind.cli.CmdOption;
 import org.ow2.mind.cli.CommandLine;
 import org.ow2.mind.cli.InvalidCommandLineException;
 import org.ow2.mind.cli.Options;
@@ -36,7 +37,7 @@ public class ProcessBuildFolder {
 			+ "NMCommand",
 			"N", "nm-command",
 			"Specify the command to invoke a nm like tool",
-			"The path or name to a version of nm matching the binary object format",
+			"<nmExecutable>",
 			"nm", false);
 
 
@@ -47,7 +48,29 @@ public class ProcessBuildFolder {
 	String nmCommand = null;
 
 	protected void printHelp(final PrintStream ps) {
-		System.err.println("");
+		printUsage(ps);
+		ps.println();
+		ps.println("Available options are :");
+		int maxCol = 0;
+
+		for (final CmdOption opt : options.getOptions()) {
+			final int col = 2 + opt.getPrototype().length();
+			if (col > maxCol) maxCol = col;
+		}
+		for (final CmdOption opt : options.getOptions()) {
+			final StringBuffer sb = new StringBuffer("  ");
+			sb.append(opt.getPrototype());
+			while (sb.length() < maxCol)
+				sb.append(' ');
+			sb.append("  ").append(opt.getDescription());
+			ps.println(sb);
+		}
+	}
+
+	protected void printUsage(final PrintStream ps) {
+		ps.println("Usage: " + getProgramName()
+				+ " [OPTIONS] <buildFolder>");
+		ps.println("  where <buildFolder> is the output folder from a mindc compilation");
 	}
 
 	protected void printVersion(final PrintStream ps) {
@@ -118,7 +141,7 @@ public class ProcessBuildFolder {
 		cmdLine = CommandLine.parseArgs(options, false, args);
 
 		// If help is asked, print it and exit.
-		if (helpOpt.isPresent(cmdLine)) {
+		if (helpOpt.isPresent(cmdLine) || (args.length == 0)) {
 			printHelp(System.out);
 			System.exit(0);
 		}

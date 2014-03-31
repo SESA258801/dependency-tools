@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import org.objectweb.fractal.adl.util.FractalADLLogManager;
 import org.ow2.mind.cli.CmdArgument;
+import org.ow2.mind.cli.CmdOption;
 import org.ow2.mind.cli.CommandLine;
 import org.ow2.mind.cli.CmdFlag;
 import org.ow2.mind.cli.InvalidCommandLineException;
@@ -38,21 +39,21 @@ public class ObjDepSolver {
 			ID_PREFIX
 			+ "DSM",
 			null, "dsm",
-			"Output a dependency structure matrix in .csv format",
-			"The file to which the dsm will be outputed ('-' for standard output)");
+			"Output a dependency structure matrix in .csv format to <file> ('-' for standard output)",
+			"<file>");
 	protected final CmdArgument       graphArg                 = new CmdArgument(
 			ID_PREFIX
 			+ "Graph",
 			null, "graph",
-			"Output a dependency graph in .gc format",	
-			"The file to which the graph will be outputed ('-' for standard output)");
+			"Output a dependency graph in .gv format to <file> ('-' for standard output)",	
+			"<file>");
 
 	protected final CmdArgument   nmCommandArg              = new CmdArgument(
 			ID_PREFIX
 			+ "NMCommand",
 			"N", "nm-command",
 			"Specify the command to invoke a nm like tool",
-			"The path or name to a version of nm matching the binary object format",
+			"<nmExecutable>",
 			"nm", false);
 
 	protected final Options       options                    = new Options();
@@ -60,8 +61,31 @@ public class ObjDepSolver {
 	protected CommandLine cmdLine = null;
 
 	protected void printHelp(final PrintStream ps) {
-		System.err.println("");
+		printUsage(ps);
+		ps.println();
+		ps.println("Available options are :");
+		int maxCol = 0;
+
+		for (final CmdOption opt : options.getOptions()) {
+			final int col = 2 + opt.getPrototype().length();
+			if (col > maxCol) maxCol = col;
+		}
+		for (final CmdOption opt : options.getOptions()) {
+			final StringBuffer sb = new StringBuffer("  ");
+			sb.append(opt.getPrototype());
+			while (sb.length() < maxCol)
+				sb.append(' ');
+			sb.append("  ").append(opt.getDescription());
+			ps.println(sb);
+		}
 	}
+
+	protected void printUsage(final PrintStream ps) {
+		ps.println("Usage: " + getProgramName()
+				+ " [OPTIONS] <objectFiles>+");
+		ps.println("  where <objectFiles> are compiled binary files from a C compilation");
+	}
+
 
 	protected void printVersion(final PrintStream ps) {
 		ps.println(getProgramName() + " version " + getVersion());
@@ -86,7 +110,7 @@ public class ObjDepSolver {
 		cmdLine = CommandLine.parseArgs(options, false, args);
 
 		// If help is asked, print it and exit.
-		if (helpOpt.isPresent(cmdLine)) {
+		if (helpOpt.isPresent(cmdLine) || (args.length == 0)) {
 			printHelp(System.out);
 			System.exit(0);
 		}
@@ -100,7 +124,7 @@ public class ObjDepSolver {
 
 	protected void run() throws IOException {
 
-		
+
 		// get list of binary object
 		List<String> objectFiles = cmdLine.getArguments();
 		Set<File> files = new HashSet<File>();
@@ -141,7 +165,7 @@ public class ObjDepSolver {
 			if (dsmArg.getValue(cmdLine).equals("-")) {
 				dsmOutput = new BufferedWriter(new OutputStreamWriter(System.out));
 			} else {
-				File f = new File(graphArg.getValue(cmdLine));
+				File f = new File(dsmArg.getValue(cmdLine));
 				if (f.exists()) {
 					System.err.println("OutputFile for graph already exists");
 					return;
