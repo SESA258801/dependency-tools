@@ -1,0 +1,13 @@
+digraph {
+main_o:center->a_o:center[label=a_text]
+d_o:center->e_o:center[label=e_data]
+a_o:center->b_o:center[label=b_bss]
+a_o:center->c_o:center[label=c_text]
+a_o:center->c_o:center[label=c_data]
+a_o:center->b_o:center[label=b_data]
+b_o:center->d_o:center[label=d_text]
+b_o:center->d_o:center[label=d_data]
+e_o:center->d_o:center[label=d_text]
+c_o:center->e_o:center[label=e_data]
+c_o:center->e_o:center[label=e_text]
+}
