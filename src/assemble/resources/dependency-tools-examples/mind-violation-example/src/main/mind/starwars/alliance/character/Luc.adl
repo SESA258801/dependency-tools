@@ -1,0 +1,15 @@
+@Singleton
+/**
+ * Component impersonating Leia. 
+ */
+primitive starwars.alliance.character.Luc {
+ 	/**
+ 	 * Control the basic actions for Luc.
+ 	 */
+	provides starwars.Character as character; 	
+	/**
+	 * Declares global variables. ok as it is a Singleton.
+	 * <br> Uses stdio.h
+	 */
+	 source Luc.c;
+}

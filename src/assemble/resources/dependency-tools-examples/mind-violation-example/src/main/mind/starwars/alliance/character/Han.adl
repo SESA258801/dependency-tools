@@ -1,0 +1,15 @@
+@Singleton
+/**
+ * Component impersonating Han Solo. 
+ */
+primitive starwars.alliance.character.Han {
+ 	/**
+ 	 * Control the basic actions for Han Solo.
+ 	 */
+	provides starwars.Character as character; 	
+	/**
+	 * Declares global variables. ok as it is a Singleton.
+	 * <br> Uses stdio.h
+	 */
+	source Han.c;
+}

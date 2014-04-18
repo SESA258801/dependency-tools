@@ -1,0 +1,16 @@
+@Singleton
+@UseIDL({"starwars.Character"})
+/**
+ * The pitch of this little StarWars story 
+ */
+primitive starwars.Pitch {
+	/**
+	 * To play this story we need a space-craft to play the death-star 
+	 */
+	requires Spacecraft as deathStar;
+	/**
+	 * To play this story we need a space-craft to play the millenium-falcon 
+	 */
+	requires Spacecraft as milleniumFalcon;
+	source Pitch.c;
+}

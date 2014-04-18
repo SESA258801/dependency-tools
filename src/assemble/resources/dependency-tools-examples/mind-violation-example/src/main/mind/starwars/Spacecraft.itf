@@ -1,0 +1,34 @@
+@ImportIDL({"starwars.Character"})
+/**
+ * Represent the possible interactions with a space-craft
+ */
+interface starwars.Spacecraft {
+	/**
+	 * The space-craft will take off and fly
+	 */
+	void takeOff(void);
+	/**
+	 * @return the name of the ship
+	 */
+	string getName(void);
+	/**
+	 * Get a passenger of the space-craft.
+	 * <br> The character will stay bound to the space-craft.
+	 * <br> This method is useful to manipulate a character inside the space-craft. 
+	 * @return : an interface starwars.Character, might be null.
+	 */
+	starwars_Character getPassenger(void);
+	/**
+	 * Get a passenger of the spac-craft.
+	 * <br> The character will no longer belong to the space craft.
+	 * <br> The reference to the character must be keep if needed again
+	 * @return an interface starwars.Character, might be null.
+	 */
+	starwars_Character removePassenger(void);
+	/**
+	 * Add a passenger to the space-craft.
+	 * <br> The character will be bound to the space craft.
+	 * <br> might fail silently. (This is bad, but this is just an example code)
+	 */
+	void addPassenger(starwars_Character newPassenger);
+}

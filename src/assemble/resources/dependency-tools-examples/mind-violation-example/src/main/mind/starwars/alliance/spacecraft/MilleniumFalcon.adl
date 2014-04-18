@@ -1,0 +1,39 @@
+/**
+ * The MilleniumFalcon space-craft
+ */
+composite starwars.alliance.spacecraft.MilleniumFalcon {
+	/**
+	 * Controls the space-craft
+	 */
+	provides starwars.Spacecraft as spacecraft;
+	binds this.spacecraft to engine.spacecraft;
+
+	/**
+	 * Controls the passengers of the MilleniumFalcon
+	 */
+	contains starwars.SpacecraftEngine("MilleniumFalcon") as engine;
+	/**
+	 * Han is a passenger of the MilleniumFalcon 
+	 */
+	binds engine.passengers[0] to pilote.character;
+	/**
+	 * Luc is a passenger of the MilleniumFalcon 
+	 */
+	binds engine.passengers[1] to jedi.character;
+	/**
+	 * Leia is a passenger of the MilleniumFalcon 
+	 */
+	binds engine.passengers[2] to princess.character;
+	/**
+	 * Contains the pilote Han 
+	 */
+	contains starwars.alliance.character.Han as pilote;
+	/**
+	 * Contains the jedi Luc 
+	 */	
+	contains starwars.alliance.character.Luc as jedi;
+	/**
+	 * Contains princess Leia 
+	 */
+	contains starwars.alliance.character.Leia as princess;	
+}

@@ -1,0 +1,15 @@
+#include "Character.h"
+/**
+ * Control a character of the story
+ */
+interface starwars.Character {
+	/**
+	 * @return the character name
+	 */
+	string getName(void);
+	/**
+	 * Talk to an other character.
+	 * @param interlocutor the character to talk to.
+	 */
+	void talkTo(starwars_Character interlocutor);
+}

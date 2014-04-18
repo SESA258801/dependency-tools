@@ -1,0 +1,15 @@
+@Singleton
+/**
+ * Component impersonating DarthVader
+ */
+primitive starwars.empire.character.DarthVader {
+	/**
+	 * Control the basic actions of DarthVader
+	 */
+	provides starwars.Character as character; 	
+	/**
+	 * Declares global variables. ok as it is a Singleton.
+	 * <br> Uses stdio.h
+	 */
+	source DarthVader.c;
+}

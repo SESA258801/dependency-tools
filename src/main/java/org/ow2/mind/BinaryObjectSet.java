@@ -88,7 +88,7 @@ public class BinaryObjectSet extends HashSet<BinaryObject> {
 		for (BinaryObject from : this){
 			for (Symbol sym : from.undefined.keySet() ) {
 				BinaryObject to = from.undefined.get(sym);
-				if (to !=null) out.write(from.name.replace(".","_") + "->" + to.name.replace(".","_") + "[label=" + sym.name + "]" + NEW_LINE );
+				if (to !=null) out.write(from.name.replace(".","_") + ":center->" + to.name.replace(".","_") + ":center[label=" + sym.name + "]" + NEW_LINE );
 			}
 		}
 		out.write("}" + NEW_LINE );
