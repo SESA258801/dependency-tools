@@ -1,0 +1,5 @@
+primitive starwars.alliance.character.Luc {
+ 	
+	provides starwars.Character as character; 	
+	source Luc.c;
+}

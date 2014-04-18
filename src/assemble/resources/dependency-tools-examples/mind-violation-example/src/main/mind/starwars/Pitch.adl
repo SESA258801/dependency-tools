@@ -1,0 +1,7 @@
+@UseIDL({"starwars.Character"})
+primitive starwars.Pitch {
+	provides boot.Main as entryPoint;
+	source Pitch.c;
+	requires Spacecraft as deathStar;
+	requires Spacecraft as milleniumFalcon;
+}

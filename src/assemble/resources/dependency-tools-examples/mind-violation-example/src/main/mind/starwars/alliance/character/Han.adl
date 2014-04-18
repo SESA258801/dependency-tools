@@ -1,0 +1,5 @@
+primitive starwars.alliance.character.Han {
+ 	
+	provides starwars.Character as character; 	
+	source Han.c;
+}

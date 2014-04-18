@@ -1,0 +1,8 @@
+composite starwars.Episode {
+	contains boot.Bootstrap as boot;
+	binds boot.entryPoint to pitch.entryPoint;
+	contains Pitch as pitch;
+	binds pitch.deathStar to deathStar.orbitalStation;
+	contains starwars.empire.spacecraft.DeathStar as deathStar;
+	binds pitch.milleniumFalcon to deathStar.prisonerSpacecraft;	
+}

@@ -1,0 +1,2 @@
+struct __component_starwars_Character_itf_desc;
+typedef struct __component_starwars_Character_itf_desc *starwars_Character;

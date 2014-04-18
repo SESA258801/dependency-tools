@@ -1,0 +1,7 @@
+primitive starwars.SpacecraftEngine(NAME) {
+	provides Spacecraft as spacecraft;
+	requires optional Character as passengers[10]; 	
+	attribute string name = NAME;
+	attribute int currentPassenger=0;
+	source SpacecraftEngine.c;
+}

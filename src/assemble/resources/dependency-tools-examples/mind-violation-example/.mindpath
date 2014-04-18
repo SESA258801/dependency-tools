@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mindpath>
+	<mindpathentry kind="SOURCE" path="/mind-violation-example/src/main/mind"/>
+	<mindpathentry kind="SOURCE" path="/mind-violation-example/src/test/mind"/>
+	<mindpathentry kind="APPLI" path="starwars.Episode:Episode"/>
+</mindpath>

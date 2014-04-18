@@ -1,0 +1,8 @@
+@ImportIDL({"starwars.Character"})
+interface starwars.Spacecraft {
+	void fly(void);
+	string getName(void);
+	starwars_Character getPassenger(void);
+	starwars_Character removePassenger(void);
+	void addPassenger(starwars_Character newPassenger);
+}

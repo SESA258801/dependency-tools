@@ -1,0 +1,5 @@
+#include "Character.h"
+interface starwars.Character {
+	string getName(void);
+	void talkTo(starwars_Character interlocutor);
+}

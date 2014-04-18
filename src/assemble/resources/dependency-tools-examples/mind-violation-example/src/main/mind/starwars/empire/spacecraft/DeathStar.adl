@@ -1,0 +1,11 @@
+composite starwars.empire.spacecraft.DeathStar {
+	provides starwars.Spacecraft as orbitalStation;
+	binds this.orbitalStation to engine.spacecraft;
+	contains starwars.SpacecraftEngine("DeathStar") as engine;
+	binds engine.passengers[0] to commander.character;
+	contains starwars.empire.character.DarthVader as commander;
+	
+	provides starwars.Spacecraft as prisonerSpacecraft;
+	binds this.prisonerSpacecraft to milleniumFalcon.spacecraft;
+	contains starwars.alliance.spacecraft.MilleniumFalcon as milleniumFalcon;
+}

@@ -1,0 +1,13 @@
+composite starwars.alliance.spacecraft.MilleniumFalcon {
+	provides starwars.Spacecraft as spacecraft;
+	binds this.spacecraft to engine.spacecraft;
+
+	contains starwars.SpacecraftEngine("MilleniumFalcon") as engine;
+	binds engine.passengers[0] to pilote.character;
+	binds engine.passengers[1] to jedi.character;
+	binds engine.passengers[2] to princess.character;
+	
+	contains starwars.alliance.character.Han as pilote;
+	contains starwars.alliance.character.Luc as jedi;
+	contains starwars.alliance.character.Leia as princess;	
+}

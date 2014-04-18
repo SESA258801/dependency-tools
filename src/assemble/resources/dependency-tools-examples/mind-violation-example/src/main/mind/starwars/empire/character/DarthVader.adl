@@ -1,0 +1,5 @@
+@Singleton
+primitive starwars.empire.character.DarthVader {
+	provides starwars.Character as character; 	
+	source DarthVader.c;
+}
