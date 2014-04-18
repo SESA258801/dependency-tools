@@ -1,8 +1,24 @@
+/**
+ * A stand alone application
+ * No Bootsrap is used here so no constructor will be called
+ * (hopefully there is no constructor in this application) 
+ */
 composite starwars.Episode {
-	contains boot.Bootstrap as boot;
-	binds boot.entryPoint to pitch.entryPoint;
+	/**
+	 * The scenario for this story
+	 */
 	contains Pitch as pitch;
-	binds pitch.deathStar to deathStar.orbitalStation;
+	/**
+	 * The death-star orbital station that also contains 
+	 * the millenium-falcon as a prisoner. 
+	 */
 	contains starwars.empire.spacecraft.DeathStar as deathStar;
+	/**
+	 * deathStar is required by the pitch
+	 */
+	binds pitch.deathStar to deathStar.orbitalStation;
+	/**
+	 * milleniumFalcon is required by the pitch
+	 */
 	binds pitch.milleniumFalcon to deathStar.prisonerSpacecraft;	
 }

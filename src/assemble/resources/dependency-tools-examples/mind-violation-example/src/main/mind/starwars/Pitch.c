@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int METH(entryPoint,main)(int argc, char** argv){
+int main(void){
 	starwars_Character commander = CALL(deathStar,getPassenger)();
 	starwars_Character  allies[10]={0};
 	int i;
@@ -23,13 +23,14 @@ int METH(entryPoint,main)(int argc, char** argv){
 		CALL(milleniumFalcon,addPassenger)(allies[i]);
 	}
 
-	CALL(milleniumFalcon,fly)();
+	CALL(milleniumFalcon,takeOff)();
 
 	printf("\nAnd congratulate themself.\n");
 	for (i=0; i<10; i++)
 		if (allies[i]!=0) {
 			for (j=i+1; j<10; j++){
 				if ((allies[j]!=0)&&(j!=i)){
+					printf("\n");
 					CALL_PTR(allies[j],talkTo)(allies[i]);
 					CALL_PTR(allies[i],talkTo)(allies[j]);
 				}

@@ -1,7 +1,26 @@
+/**
+ * The link between a space-craft and it's passenger 
+ */
 primitive starwars.SpacecraftEngine(NAME) {
+	/**
+	 * Control the space-craft
+	 */
 	provides Spacecraft as spacecraft;
+	/**
+	 * Passengers of the space-craft are bound to this interface
+	 * <br> Use the space-craft interface to act on the passengers  
+	 */
 	requires optional Character as passengers[10]; 	
+	/**
+	 * The name of the space-craft
+	 */
 	attribute string name = NAME;
+	/**
+	 * Used to iterate other the passengers
+	 */
 	attribute int currentPassenger=0;
+	/**
+	 * Uses stdio.h
+	 */
 	source SpacecraftEngine.c;
 }

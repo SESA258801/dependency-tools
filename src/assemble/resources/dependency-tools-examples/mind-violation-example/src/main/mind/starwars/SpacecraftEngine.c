@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void METH(spacecraft,fly)(void)
+void METH(spacecraft,takeOff)(void)
 {
 	// A space-craft should be able to fly isn't it ?
 	printf("\n\nThe %s is taking of !\n",ATTR(name));

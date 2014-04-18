@@ -1,11 +1,29 @@
+/**
+ * The empire orbital station.
+ */
 composite starwars.empire.spacecraft.DeathStar {
+	/**
+	 * Controls the death star
+	 */
 	provides starwars.Spacecraft as orbitalStation;
 	binds this.orbitalStation to engine.spacecraft;
+	/**
+	 * Controls the passenger of the death-star 
+	 */
 	contains starwars.SpacecraftEngine("DeathStar") as engine;
 	binds engine.passengers[0] to commander.character;
+	/**
+	 * DarthVader is the only relevant passenger for this story 
+	 */
 	contains starwars.empire.character.DarthVader as commander;
 	
+	/**
+	 * Controls the prisoner space-craft
+	 */
 	provides starwars.Spacecraft as prisonerSpacecraft;
 	binds this.prisonerSpacecraft to milleniumFalcon.spacecraft;
+	/**
+	 * The millenium-falcon is the prisoner space-craft
+	 */
 	contains starwars.alliance.spacecraft.MilleniumFalcon as milleniumFalcon;
 }
