@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"./dtd/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "./shared.ent">
+%myents;
+]>
+<book status="draft" version="0.1" xmlns="http://docbook.org/ns/docbook">
+	<bookinfo>
+		<title>Dependency tools User Guide</title>
+
+		<author>
+			<firstname>Julien Tous</firstname>
+
+			<surname />
+
+			<affiliation>
+				<orgname />
+			</affiliation>
+		</author>
+
+		<pubdate>19/03/2014</pubdate>
+	</bookinfo>
+
+	<chapter>
+		<title>Introduction</title>
+		<section>
+			<title>Aim of this document</title>
+			<para>This document introduces some tools used to control the
+				dependencies
+				between object files after compilation.
+			</para>
+
+			<para>Although it is a desired feature to describe dependencies
+				between
+				components in the ADL for any Mind application, understanding
+				the implicit
+				dependencies of a legacy C application can be tedious.
+			</para>
+
+			<para>
+				Some tools exists, based on the hierarchy of
+				<code>#includes</code>
+				in the C files (mostly based on C compilers). But they suffer some
+				caveats :
+				<itemizedlist>
+					<listitem>
+						<para>
+							<code>#include</code>
+							are often over-used.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<code>#include</code>
+							serve to describe build dependencies such as
+							<code>#define</code>
+							, and symbol declarations.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Symbols declaration are not tied to be declared in the
+							corresponding header.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+
+			<para>
+				In complement to such tools we introduces the
+				<code>object-dependencies</code>
+				command, that express the symbols dependencies between the binary
+				object files created by the compilation process.
+			</para>
+
+			<para>
+				Even Mind application sometime happen to violate their encapsulation
+				:
+				<itemizedlist>
+					<listitem>
+						<para> On purpose, as a design rule, to ease reuse of externally
+							provided libraries and services.
+							For example : A set of legacy C
+							files could be sourced into a
+							component, and used directly without
+							creating interfaces, OS
+							services can be used as an implicit
+							runtime ...
+						</para>
+					</listitem>
+					<listitem>
+						<para> By an unvolontary bad implementations of the components.
+						</para>
+					</listitem>
+					<listitem>
+						<para> As an intermediate state, while restructurating a code
+							base.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+
+			<para>
+				For this purpose we introduce the
+				<code>mind-violation</code>
+				which express the dependencies between object files component by
+				component while filtering the one representing the ADL's bindings.
+			</para>
+
+			<para>
+				For both commands
+				<code>object-dependencies</code>
+				and
+				<code>mind-violation</code>
+				, we will demonstrate their usage on a simple example.
+			</para>
+		</section>
+	</chapter>
+
+	<chapter>
+		<title>object-dependencies</title>
+		<section>
+			<title>Overview</title>
+			<para>
+				The
+				<code>object-dependencies</code>
+				command is used to summarize dependencies between object at link
+				time.
+				It does not take care of build dependencies such as propagated
+				by the
+				C preprocessor.
+			</para>
+
+			<example>
+				<title>Usage screen</title>
+				<para>
+					The help screen in invocated using the
+					<code>object-dependencies --help</code>
+					command.
+				</para>
+				<programlisting> 
+<![CDATA[   
+Usage: object-dependencies [OPTIONS] <objectFiles>+
+where <objectFiles> are compiled binary files from a C compilation
+
+Available options are :
+  -h, --help                       
+  	Print this help and exit
+  -v, --version                    
+  	Print version number and exit
+  --dsm=<file>                     
+  	Output a dependency structure matrix in .csv format to <file> 
+  	('-' for standard output)
+  --graph=<file>                   
+  	Output a dependency graph in .gv format to <file> 
+  	('-' for standard output)
+  -N=<nmExecutable>, --nm-command  
+  	Specify the command to invoke a nm like tool 
+  	(default is 'nm')
+]]>
+</programlisting>
+			</example>
+
+			<para>
+				The output CSV file from the
+				<code>--dsm</code>
+				option is formated to be used by the "Cambridge Advanced Modeler"
+				(CAM) application.
+				CAM can be downloaded at
+				<ulink url="http://www-edc.eng.cam.ac.uk/cam" />
+				.
+				This Dependency Structure Matrix (DSM) representation is well
+				suited for
+				large code base.
+			</para>
+
+			<para>
+				The output GV file from the
+				<code>--graph</code>
+				option is intended to be used by one of the graphviz tools.
+				Graphviz
+				can be downloaded at
+				<ulink url="http://www.graphviz.org" />
+				.
+				This directed graph representation is well suited for small code
+				base.
+			</para>
+
+			<para>
+				The
+				<code>object-dependencies</code>
+				command, depends on the installation of the
+				<code>nm</code>
+				tool.
+				<code>nm</code>
+				can be found in the
+				<code>binutils</code>
+				package from the
+				<code>GNU</code>
+				project.
+				<code>binutil</code>
+				can be found at
+				<ulink url="http://www.gnu.org/software/binutils/" />
+				,
+				but are probably already provided with your
+				<code>gcc</code>
+				toolchain installation.
+				Some vendors (such as TI for example) also
+				provide nm-like tools as part
+				of their toolchain.
+			</para>
+
+			<para>
+				Each considered object file has to be precised individually to the
+				<code>object-dependencies</code>
+				command.
+				You should consider using an external command to get the
+				list of such
+				files (eg : Parse compilation outputs or file system
+				search (
+				<code>find outputDir -name=*.o</code>
+				), ...)).
+			</para>
+		</section>
+
+		<section>
+			<title>Analysis of an example.</title>
+			<para>
+				The <code>object-dependencies-example</code>, is a standard C project (that does nothing interesting), constituted of 6 C modules :
+				<code>a.c</code>
+				,
+				<code>b.c</code>
+				,
+				<code>c.c</code>
+				,
+				<code>d.c</code>
+				,
+				<code>e.c</code>
+				, and
+				<code>main.c</code>
+				.
+				Each of these modules but
+				<code>main.c</code>
+				export some symbols using standard C preprocessor mechanism through
+				header files
+				<code>a.h</code>
+				,
+				<code>b.h</code>
+				,
+				<code>c.h</code>
+				,
+				<code>d.h</code>
+				,
+				<code>e.h</code>
+				.
+				Those symbols add been astuciously named from there origin module.
+				(
+				<code>a_bss</code>
+				,
+				<code>a_data</code>
+				, and
+				<code>a_text</code>
+				originate from the
+				<code>a.c</code>
+				module.)
+			</para>
+			<para>
+				After building the application using the provided Makefile(
+				<code>make all</code>
+				) 6 object files should be found (
+				<code>a.o</code>
+				,
+				<code>b.o</code>
+				,
+				<code>c.o</code>
+				,
+				<code>d.o</code>
+				,
+				<code>e.o</code>
+				, and
+				<code>main.o</code>
+				) plus an executable file (
+				<code>legacyC.out</code>
+				).
+			</para>
+
+			<section>
+				<title>Dependency graph</title>
+				<para>
+					To create a dependency graph from the object files one should run
+					the command
+					<code>object-dependencies --graph=abcde.gv src/a.o src/b.o src/c.o
+						src/d.o src/e.o src/main.o
+					</code>
+					.
+				</para>
+				<para>
+					On larger program, using a search tool might be useful. For example
+					<code>object-dependencies --graph=abcde.gv src/*.o</code>
+					or
+					<code>object-dependencies --graph=abcde.gv ${find src -name *.o}
+					</code>
+					will work fine.
+				</para>
+
+				<para>
+					The file
+					<code>abcde.gv</code>
+					will be created.
+					To visualize this graph you can use one of the
+					layout program from
+					<code>graphviz</code>
+					such as
+					<code>dot</code>
+					.
+					The command
+					<code>dot -Tsvg abcde.gv > abcde.svg</code>
+					will transform the
+					<code>.gv</code>
+					file into a
+					<code>.svg</code>
+					.
+				</para>
+
+				<example>
+					<title>Dependency graph</title>
+					<mediaobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/abcde.svg" align="center" />
+						</imageobject>
+					</mediaobject>
+				</example>
+
+				<para>
+					The previous graph teaches us that :
+					<itemizedlist>
+						<listitem>
+							<para>
+								<code>main.o</code>
+								uses the symbol
+								<code>a_text</code>
+								which is defined in the
+								<code>a.o</code>
+								module.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<code>a.o</code>
+								uses the symbol
+								<code>b_bss</code>
+								and
+								<code>b_data</code>
+								from
+								<code>b.o</code>
+								and
+								<code>c_text</code>
+								and
+								<code>c_data</code>
+								from
+								<code>c.o</code>
+								.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<code>d.o</code>
+								uses the symbol
+								<code>e_data</code>
+								from
+								<code>e.o</code>
+								whereas
+								<code>e.o</code>
+								uses the symbol
+								<code>d_text</code>
+								from
+								<code>d.o</code>
+								.
+							</para>
+						</listitem>
+						<listitem>
+							<para>...</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+
+				<para>
+					By default the graph details all symbols used from each module.
+					It
+					is possible to extract a simplified view from this graph using the
+					script
+					<code>simplifyDot.awk</code>
+					distributed with the
+					<code>mind4se</code>
+					toolchain.
+					The command
+					<code>simplifyDot.awk abcde.gv > abcdeSimple.gv</code>
+					will create the following graph.
+				</para>
+
+				<example>
+					<title>Simplifyed dependency graph</title>
+					<mediaobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/abcdeSimple.svg" align="center" />
+						</imageobject>
+					</mediaobject>
+				</example>
+
+				<para>
+					The simplified view only present dependencies between modules,
+					not
+					there name.
+					The arrow width grows accordingly to the number of
+					symbols used.
+				</para>
+
+			</section>
+
+			<section>
+				<title>Dependency Structure Matrix</title>
+				<para>
+					To create a dependency structure matrix from the object files one
+					should run the command
+					<code>object-dependencies --dsm=abcde.cszv src/a.o src/b.o src/c.o
+						src/d.o src/e.o src/main.o
+					</code>
+					.
+				</para>
+
+				<para>
+					The file
+					<code>abcde.csv</code>
+					will be created.
+					One can visualize this DSM using
+					<code>Excel</code>
+					for example.
+				</para>
+
+				<table frame='all'>
+					<title>Dependency structure matrix</title>
+					<tgroup cols='8' align='left' colsep='1' rowsep='1'>
+						<colspec colname='' />
+						<colspec colname='Hierachy ID' />
+						<colspec colname='1' />
+						<colspec colname='2' />
+						<colspec colname='3' />
+						<colspec colname='4' />
+						<colspec colname='5' />
+						<colspec colname='6' />
+						<thead>
+							<row>
+								<entry></entry>
+								<entry>Hierachy ID</entry>
+								<entry>1</entry>
+								<entry>2</entry>
+								<entry>3</entry>
+								<entry>4</entry>
+								<entry>5</entry>
+								<entry>6</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>main.o</entry>
+								<entry>1</entry>
+								<entry></entry>
+								<entry></entry>
+								<entry>1</entry>
+							</row>
+							<row>
+								<entry>d.o</entry>
+								<entry>2</entry>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								<entry>1</entry>
+							</row>
+							<row>
+								<entry>a.o</entry>
+								<entry>3</entry>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								<entry>1</entry>
+								<entry></entry>
+								<entry>1</entry>
+							</row>
+							<row>
+								<entry>b.o</entry>
+								<entry>4</entry>
+								<entry></entry>
+								<entry>1</entry>
+							</row>
+							<row>
+								<entry>e.o</entry>
+								<entry>5</entry>
+								<entry></entry>
+								<entry>1</entry>
+							</row>
+							<row>
+								<entry>c.o</entry>
+								<entry>6</entry>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								<entry>1</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+
+				<para>
+					The information in the dependency structure matrix is equivalent to
+					the one provided in the simple graph.
+					The two first row relate
+					module names with a numeral
+					<code>hierachy ID.</code>
+					.
+					Rows from the second to the last represent the dependencies
+					between
+					module.
+				</para>
+
+				<para>
+					A
+					<code>1</code>
+					at the crossing of
+					<code>hierachy IDs</code>
+					indicate a dependence between module.
+					From the previous table we
+					learn :
+					<itemizedlist>
+						<listitem>
+							<para>
+								From the second line that
+								<code>main.o</code>
+								depends on the module with
+								<code>hierachy ID</code>
+								3, which is
+								<code>a.o</code>
+								.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								From the seventh row that the module with
+								<code>hierachy ID</code>
+								5 (
+								<code>e.o</code>
+								) is used by the modules
+								<code>d.o</code>
+								and
+								<code>c.o</code>
+							</para>
+						</listitem>
+						<listitem>
+							<para>...</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+
+				<para>
+					The
+					<code>abcde.csv</code>
+					file can also be imporeted with CAM which provides algorithm for
+					clustering highly dependent modules, and triangulizing the matrix.
+					<example>
+						<title>Import of the CSV file with CAM</title>
+						<mediaobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/CamAbcdeImport.png" align="center" />
+							</imageobject>
+						</mediaobject>
+					</example>
+					<example>
+						<title>Clustering and triangulizing with CAM</title>
+						<mediaobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/CamAbcdeClustered.png"
+									align="center" />
+							</imageobject>
+						</mediaobject>
+					</example>
+				</para>
+				Althought those algorithm can not replace architecture document, it
+				can ease analysis of large piece of code.
+			</section>
+
+		</section>
+	</chapter>
+
+	<chapter>
+		<title>mind-violation</title>
+
+		<section>
+			<title>Overview</title>
+
+			<para>
+				The
+				<code>mind-violation</code>
+				command is used to trac unexpressed dependencies between mind
+				components.
+				It does not take care of build dependencies such as
+				propagated by the
+				C preprocessor, but of C symbol direct usage, which
+				breaks the strict encapsulation of component.
+			</para>
+
+			<example>
+				<title>Usage screen</title>
+				<para>
+					The help screen in invocated using the
+					<code>mind-violation --help</code>
+					command.
+				</para>
+				<programlisting> 
+<![CDATA[   
+Usage: mind-violation [OPTIONS] <buildFolder>
+  where <buildFolder> is the output folder from a mindc compilation
+
+Available options are :
+  -h, --help                       
+    Print this help and exit
+  -v, --version                    
+    Print version number and exit
+  -N=<nmExecutable>, --nm-command  
+    Specify the command to invoke a nm like tool (default is 'nm')
+
+]]>
+</programlisting>
+			</example>
+			<para>
+				The outputs of the program are 3 files :
+				<code>HiddenDeps.dot</code>
+				,
+				<code>HiddenDeps.csv</code>
+				, and
+				<code>HiddenDeps.txt</code>
+				.
+				They all represent hidden dependencies between components definition
+				used in the the build.
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<code>HiddenDeps.dot</code>
+						represent hidden dependencies as a graph.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<code>HiddenDeps.csv</code>
+						represent hidden dependencies as a dependency structure matrix.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<code>HiddenDeps.txt</code>
+						represent hidden dependencies textualy grouped by components.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
+		<section>
+		<title>Analysis of an example</title>
+		<section>
+		<title>Application overview</title>
+		<para>
+		In a <code>GalaxyFarFarAway</code> the <code>DeathStar</code> as taken the <code>MilleniumFalcon</code> prisoner.
+		Both spacecraft are made of a <code>SpacecraftEngine</code> which monitor the incomming and outcomming of its passengers.
+		<code>DarthVader</code> is passenger of the <code>DeathStar</code>. 
+		<code>Luc</code>, <code>Leia</code>, and <code>Han</code> are passenger of the <code>MilleniumFalcon</code>.
+		All character can react to one another when they meet.
+		The <code>Pitch</code> component controls the evolution of the spacecrafts and characters.
+		</para>
+		<example>
+			<title>Application overview</title>
+					<mediaobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/StarWarOverview.svg" scale="50"
+								align="center" />
+							</imageobject>
+					</mediaobject>
+			</example>
+		<para>
+		To build the application, run the <code>make compile</code> command.
+		Running the application with command <code>./target/Default/binaries/StarWar</code> should print to the screen a few dialog between the characters.		
+		</para>
+		</section>
+		
+		<section>
+		<title>Examining the hidden dependencies</title>
+		<para>
+		To track the hidden dependencies between those components, one should run the command <code>mind-violation target/Default/binaries/</code>.
+		Three files <code>HiddenDeps.dot</code>, <code>HiddenDeps.csv</code>, and <code>HiddenDeps.txt</code>, will be created in the directory <code>target/Default</code>
+		</para>
+		<para>
+		<code>HiddenDeps.dot</code> can be visualized with some of the <code>graphviz</code> as explained in the previous chapter.
+		</para>
+		<example>
+			<title>Graph of hidden dependencies in the application.</title>
+					<mediaobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/StarWarHiddenDeps.dot.svg" scale="50"
+								align="center" />
+							</imageobject>
+					</mediaobject>
+			</example>
+			<para>
+			The previous graph, explains that : 
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+					The component <code>DarthVader</code> depends on the symbol <code>LucName</code>, which is defined in the component <code>Luc</code>.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+					The component <code>Leia</code> depends on the symbol <code>Han</code>, whereas the component <code>Han</code> depends on the symbol <code>Leia</code>.
+					</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+			You should not that in the architecture diagram, dependencies are expressed from instances to instances.
+			Hidden dependencies are expressed from definition to definition.
+			By looking at the adls you will find the relation between instances and type that can relate both diagrams.  
+			</para>
+<programlisting language="adl"> 
+<![CDATA[   
+...
+contains starwars.empire.character.DarthVader as commander;
+...
+contains starwars.alliance.character.Han as pilote;
+contains starwars.alliance.character.Luc as jedi;
+contains starwars.alliance.character.Leia as princess;	 
+...
+]]>
+</programlisting>
+	<para>
+	It is likely that hidden symbol dependencies between components will break the application if the components are multi-instanciated, or inherited.
+	Components that expose symbols purposely should (most of the time) be declared singletons with the <code>@Singleton</code> annotation.  
+	</para>
+	
+	<para>
+	The <code>HiddenDeps.csv</code> file can be vizualized using <code>excel</code> or <code>CAM</code>. 
+	</para>
+	<example>
+				<title>Dependency structure matrix of hidden dependencies in the application.</title>
+					<mediaobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/StarWarHiddenDeps.csv.png" scale="50"
+								align="center" />
+							</imageobject>
+					</mediaobject>
+			</example>
+		<para>
+		The <code>HiddenDeps.txt</code> file is a plain text file which describe the hidden dependencies.
+		</para>
+		<example>
+		<title>Extract "Textual" description of the hidden dependencies</title>
+		<programlisting> 
+<![CDATA[
+...   
+DarthVader {
+ Defined symbols :
+ Undefined symbols :
+  LucName                resolved by Luc
+  printf                 unresolved 
+}
+
+Han {
+ Defined symbols :
+  HanName                data
+ Undefined symbols :
+  LeiaName               resolved by Leia
+  printf                 unresolved 
+}
+
+Leia {
+ Defined symbols :
+  LeiaName               data
+ Undefined symbols :
+  HanName                resolved by Han
+  printf                 unresolved 
+}
+
+Luc {
+ Defined symbols :
+  LucName                data
+ Undefined symbols :
+  printf                 unresolved 
+}
+
+SpacecraftEngine {
+ Defined symbols :
+ Undefined symbols :
+  printf                 unresolved 
+}
+
+Pitch {
+ Defined symbols :
+ Undefined symbols :
+  printf                 unresolved 
+  putchar                unresolved 
+  puts                   unresolved 
+}
+...
+]]>
+</programlisting>
+		</example>
+	<para>
+	In the textual representation, component names are followed (between braces) by a summary of dependencies from and to other components
+	Component <code>Leia</code> for example :
+	</para>
+				<itemizedlist>
+				<listitem>
+					<para>
+					Exports the symbol <code>LeiaName</code> which belongs to the <code>data</code> section.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+					Uses the symbol <code>HanName</code> which is defined in the <code>Han</code> component.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+					Uses the symbol <code>printf</code> which is not defined in any of the components. <code>printf</code>, is defined by <code>libc</code>, which is not considered part of any component here.
+					</para>
+				</listitem>
+			</itemizedlist>
+	</section>
+	<section>
+	<title>Treating the hidden dependencies</title>
+	<para>
+	The ability to mix standard <code>C</code> with <code>Mind</code> components, is a very useful feature, which often impose to be able to export and import symbols from components.
+	Howether to be fully reusable, a component must NOT rely on such features. Application made of "pure" Mind components, will lead to empty <code>HiddenDeps.dot</code> graph, and <code>HiddenDeps.csv</code> matrix.
+	</para>
+	<para>
+	In many cases partial reusablility is enough. For example relying on the <code>libc</code> seems acceptable in many cases. 
+	While developing such components, this hidden dependency sould be well documented as a design rule.    
+	</para>
+	<para>
+	Let's examine what possible solutions are available to treat the hidden dependencies in our example.
+	</para>
+
+	By looking at the code of <code>DarthVader</code> we can localize the dependency to <code>Luc</code>.
+	<example>
+		<title>DarthVader dependency to Luc</title>
+		<programlisting language="c"> 
+<![CDATA[
+...   
+#include "starwars/alliance/character/Luc.h"
+
+string* DarthVaderSonName = &LucName;
+...
+if (interlocutorName == *DarthVaderSonName) {
+...
+]]>
+		</programlisting>
+	</example>
+			<orderedlist>
+			<title>Possible solutions :</title>
+				<listitem>
+					<para>
+					Do nothing but document the dependency in the <code>DarthVader</code> adl : 
+					</para>
+					<programlisting language="c">
+<![CDATA[
+/**
+ * This component implicitely depends on an external symbol :
+ *     string LucName;
+ * that is provided by the component starwars.alliance.character.Luc
+ * Thus this component cannot be instanciated "as is", 
+ * if Luc component is not instanciated in the Application.
+ */
+]]>					
+					</programlisting> 
+					<para>
+					This solution involves almost no workload, no overhead to the program, the application is still difficult to understand.
+					Such specific design rules are hard to track.  
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+					Modify the components to use comparison of strings instead of comparison of string pointers. <code>DarthVader</code> code becomes :
+					</para>
+					<programlisting language="c">
+<![CDATA[
+...
+// Defines LUCNAME as "Luc" !
+#include "starwars/alliance/character/Luc.h" 
+
+string DarthVaderSonName = LUCNAME;
+...
+if (!strcmp(interlocutorName,DarthVaderSonName)) {
+...
+]]>					
+					</programlisting> 
+					<para>
+					This solution transform the symbol dependency into a build dependency (which fit the reality well). 
+					<code>DarthVader</code> can be used in application where <code>Luc</code> isn't instanciated.
+					This costs an extra string "Luc", an a call to <code>strcmp</code>.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+					Express the dependency from <code>DarthVader</code> to <code>Luc</code> with an interface and a binding. 
+					</para>
+					<programlisting language="adl">
+<![CDATA[
+primitive starwars.empire.character.DarthVader {
+  requires starwars.Character as son;
+  ...
+]]>					
+					</programlisting>
+					<programlisting language="cpl">
+<![CDATA[
+...
+if (interlocutorName == CALL(son,getName()) {
+...
+]]>					
+					</programlisting>
+					<para>Althought this solution remove the hidden dependency, it introduces lot of complexity in the architecture. 
+					Especialy if you also treat the fact that <code>Han</code> and <code>Leia</code> are lovers (the other hidden dependencies).
+					If you want to enhance the components to take into account that <code>Leia</code> is also daugther to <code>DarthVader</code>, <code>Luc</code> is brother to <code>Leia</code>...
+					soon the architecture will become un-understandable. 
+					But in many other case, this solution is the way to go. 
+					</para>
+				</listitem>
+			</orderedlist>
+
+	
+	
+	</section>
+	
+	</section>
+	</chapter>
+
+
+</book>

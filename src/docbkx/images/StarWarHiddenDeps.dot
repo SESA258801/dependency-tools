@@ -1,0 +1,6 @@
+digraph {
+ranksep=2;
+DarthVader->Luc[label=LucName]
+Han->Leia[label=LeiaName]
+Leia->Han[label=HanName]
+}

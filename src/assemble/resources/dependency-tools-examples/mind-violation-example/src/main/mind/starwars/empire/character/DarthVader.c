@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "starwars/alliance/character/Luc.h"
 
-string DarthVaderName = "DarthVader";
 string* DarthVaderSonName = &LucName;
+string DarthVaderName = "DarthVader";
+
 
 string METH(character,getName)(void){
 	return DarthVaderName;

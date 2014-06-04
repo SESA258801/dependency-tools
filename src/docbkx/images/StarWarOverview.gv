@@ -1,0 +1,63 @@
+digraph TopLevel {
+rankdir=LR;
+//ranksep=3;
+subgraph cluster_membrane {
+penwidth=15;
+color=blue;
+style=rounded;
+subgraph cluster_white1 {
+color=white;
+label="GalaxyFarFarAway";
+
+pitchComp [URL="TopLevel.TopLevel.pitch.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="pitch | {{  } | | { <deathStar> deathStar | <milleniumFalcon> milleniumFalcon }} | " ];
+
+subgraph cluster_deathStar {
+//deathStarComp [URL="TopLevel.TopLevel.deathStar.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="deathStar | {{ <orbitalStation> orbitalStation | <prisonerSpacecraft> prisonerSpacecraft } | | {  }} | " ];
+penwidth=15;
+color=blue;
+style=rounded;
+label="";
+
+subgraph cluster_white3 {
+label="deathStar";
+color=white;
+
+deathStarengineComp [URL="TopLevel.TopLevel.deathStar.engine.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="engine | {{ <spacecraft> spacecraft } | | { <passengers> passengers }} | " ];
+commanderComp [URL="TopLevel.TopLevel.deathStar.commander.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="commander | {{ <character> character } | | {  }} | " ];
+
+subgraph cluster_white5 {
+label="";
+subgraph cluster_milleniumFalcon {
+//milleniumFalconComp [URL="TopLevel.TopLevel.deathStar.milleniumFalcon.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="milleniumFalcon | {{ <spacecraft> spacecraft } | | {  }} | " ];
+penwidth=15;
+color=blue;
+style=rounded;
+label="";
+subgraph cluster_white5 {
+label=milleniumFalcon;
+color=white;
+
+milleniumFalconengineComp [URL="TopLevel.TopLevel.deathStar.milleniumFalcon.engine.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="engine | {{ <spacecraft> spacecraft } | | { <passengers> passengers }} | " ];
+piloteComp [URL="TopLevel.TopLevel.deathStar.milleniumFalcon.pilote.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="pilote | {{ <character> character } | | {  }} | " ];
+jediComp [URL="TopLevel.TopLevel.deathStar.milleniumFalcon.jedi.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="jedi | {{ <character> character } | | {  }} | " ];
+princessComp [URL="TopLevel.TopLevel.deathStar.milleniumFalcon.princess.gv",shape=Mrecord,style=filled,fillcolor=lightgrey,label="princess | {{ <character> character } | | {  }} | " ];
+Srvspacecraft->milleniumFalconengineComp:spacecraft[colorscheme="paired12" color=2];
+milleniumFalconengineComp:passengers->jediComp:character[colorscheme="paired12" color=3];
+milleniumFalconengineComp:passengers->piloteComp:character[colorscheme="paired12" color=4];
+milleniumFalconengineComp:passengers->princessComp:character[colorscheme="paired12" color=5];
+{rank=source; color=none; Srvspacecraft [shape=Mrecord,style=filled,fillcolor=red,label="spacecraft", URL="/home/sesa206922/mind4seSeleaseScript/mind4se-release-scripts/sh/mind4se-release/dependency-tools/src/assemble/resources/dependency-tools-examples/mind-violation-example/src/main/mind/starwars/Spacecraft.itf", height=1 ];}
+}
+}
+}
+deathStarengineComp:passengers->commanderComp:character[colorscheme="paired12" color=2];
+SrvorbitalStation->deathStarengineComp:spacecraft[colorscheme="paired12" color=3];
+SrvprisonerSpacecraft->Srvspacecraft:w[colorscheme="paired12" color=4];
+{rank=source; color=none; SrvorbitalStation [shape=Mrecord,style=filled,fillcolor=red,label="orbitalStation", URL="/home/sesa206922/mind4seSeleaseScript/mind4se-release-scripts/sh/mind4se-release/dependency-tools/src/assemble/resources/dependency-tools-examples/mind-violation-example/src/main/mind/starwars/Spacecraft.itf", height=1 ];SrvprisonerSpacecraft [shape=Mrecord,style=filled,fillcolor=red,label="prisonerSpacecraft", URL="/home/sesa206922/mind4seSeleaseScript/mind4se-release-scripts/sh/mind4se-release/dependency-tools/src/assemble/resources/dependency-tools-examples/mind-violation-example/src/main/mind/starwars/Spacecraft.itf", height=1 ];}
+}
+}
+pitchComp:deathStar->SrvorbitalStation:w[colorscheme="paired12" color=2];
+pitchComp:milleniumFalcon->SrvprisonerSpacecraft:w[colorscheme="paired12" color=3];
+}
+}
+}
+

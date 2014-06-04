@@ -3,7 +3,7 @@
  * No Bootsrap is used here so no constructor will be called
  * (hopefully there is no constructor in this application) 
  */
-composite starwars.Episode {
+composite starwars.GalaxyFarFarAway {
 	/**
 	 * The scenario for this story
 	 */
