@@ -25,5 +25,5 @@
 ## Launcher class name
 LAUNCHER=org.ow2.mind.ObjDepSolver
 
-#echo $(dirname $(readlink -m $0))/jar_launcher ${LAUNCHER} -Dmindc.launcher.name=object-dependencies ${LAUNCHER} $*
-exec $(dirname $(readlink -m $0))/jar_launcher ${LAUNCHER} -Dmindc.launcher.name=object-dependencies ${LAUNCHER} $*
+#echo $(dirname $0)/jar_launcher ${LAUNCHER} -Dmindc.launcher.name=object-dependencies ${LAUNCHER} "$@"
+exec $(dirname $0)/jar_launcher ${LAUNCHER} -Dmindc.launcher.name=object-dependencies ${LAUNCHER} "$@"

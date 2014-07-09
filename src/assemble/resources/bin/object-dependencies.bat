@@ -27,5 +27,5 @@ setlocal
 @REM Launcher class name
 set LAUNCHER=org.ow2.mind.ObjDepSolver
 
-echo %~dp0\jar_launcher.bat %LAUNCHER% -Dmindc.launcher.name=object-dependencies %LAUNCHER% %*
+@rem echo %~dp0\jar_launcher.bat %LAUNCHER% -Dmindc.launcher.name=object-dependencies %LAUNCHER% %*
 %~dp0\jar_launcher.bat %LAUNCHER% -Dmindc.launcher.name=object-dependencies %LAUNCHER% %*

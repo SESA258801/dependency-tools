@@ -25,5 +25,5 @@
 ## Launcher class name
 LAUNCHER=org.ow2.mind.ProcessBuildFolder
 
-#echo $(dirname $(readlink -m $0))/jar_launcher ${LAUNCHER} ${MIND_OPTS} -Dmindc.launcher.name=mind-violation ${LAUNCHER} $*
-exec $(dirname $(readlink -m $0))/jar_launcher ${LAUNCHER} ${MIND_OPTS} -Dmindc.launcher.name=mind-violation ${LAUNCHER} $*
+#echo $(dirname $0)/jar_launcher ${LAUNCHER} ${MIND_OPTS} -Dmindc.launcher.name=mind-violation ${LAUNCHER} "$@"
+exec $(dirname $0)/jar_launcher ${LAUNCHER} ${MIND_OPTS} -Dmindc.launcher.name=mind-violation ${LAUNCHER} "$@"
