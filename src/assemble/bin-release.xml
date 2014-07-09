@@ -19,18 +19,10 @@
             <fileMode>0644</fileMode>
         </dependencySet>
     </dependencySets>
-    <files>
-        <file>
-            <source>src/assemble/resources/bin/mind-violation</source>
-            <fileMode>0755</fileMode>
+    <fileSets>
+        <fileSet>
+            <directory>src/assemble/resources/bin</directory>
             <outputDirectory>bin</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-        <file>
-            <source>src/assemble/resources/bin/object-dependencies</source>
-            <fileMode>0755</fileMode>
-            <outputDirectory>bin</outputDirectory>
-            <filtered>true</filtered>
-        </file>
-    </files>
+        </fileSet>
+    </fileSets>
 </assembly>
