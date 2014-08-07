@@ -24,5 +24,9 @@
             <directory>src/assemble/resources/bin</directory>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
+    <fileSet>
+            <directory>src/assemble/resources/dependency-tools-examples</directory>
+            <outputDirectory>examples/dependency-tools</outputDirectory>
+    </fileSet>
     </fileSets>
 </assembly>
