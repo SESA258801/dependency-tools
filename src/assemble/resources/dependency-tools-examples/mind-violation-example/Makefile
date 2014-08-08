@@ -1,16 +1,15 @@
-# If the MIND_ROOT variable is defined, look for 'mindc' and 'mindunit' in this directory
-# otherwise, expect that 'mindc' and 'mindunit' are in the PATH.
+# If the MIND_ROOT variable is defined, look for Mind binaries in this directory
+# otherwise, expect that Mind binaries are in the PATH.
 ifdef MIND_ROOT
   # If MIND_ROOT contains '\', replace them by '/' (for Windows)
   MINDC = $(subst \,/, $(MIND_ROOT)/bin/mindc)
   MINDUNIT = $(subst \,/, $(MIND_ROOT)/bin/mindunit)
-else 
+  MINDOC = $(subst \,/, $(MIND_ROOT)/bin/mindoc)
+else
   MINDC = mindc
   MINDUNIT = mindunit
+  MINDOC = mindoc
 endif
-
-# Documentation generator command
-MINDOC = mindoc
 
 # Non-MindEd users should invoke this Makefile using "make CONFIGURATION=<configName> all" to run the build,
 # where <configName> matches the desired <configName>.properties file.
@@ -142,26 +141,28 @@ clean_all: clean clean_graph clean_doc clean_test
 
 compile: build
 ifdef targetComponent
-	if test ! -x $(MINDC); \
+	@if test ! -x $(MINDC) && ! (which $(MINDC) 2>&1)>/dev/null ; \
         then echo ' Not found mindc ! Set MIND_ROOT variable or go to 'Mindc location' eclipse preference page'; \
     	else $(MINDC) $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) -o=$(binOutputDir) $(targetComponent):$(binaryName) ;\
     fi
 else
-	echo "No application defined - MindEd users: Please configure your project target with the 'Mind Path' -> (right click) 'New application' menu."
+	@echo "No application defined - MindEd users: Please configure your project target with the 'Mind Path' -> (right click) 'New application' menu."
 endif
 
 graph: build_graph
 ifdef targetComponent
-	if test ! -x $(MINDC); \
+	@if test ! -x $(MINDC) && ! (which $(MINDC) 2>&1)>/dev/null ; \
         then echo ' Not found mindc ! Set MIND_ROOT variable or go to 'Mindc location' eclipse preference page'; \
     	else $(MINDC) --check-adl $(sourcePathArg) $(includePathArg) -o=$(graphOutputDir) 'dot.DumpComponentDot<'$(targetComponent)'>' ;\
     fi
 else
-	echo "No application defined - MindEd users: Please configure your project target with the 'Mind Path' -> (right click) 'New application' menu."
+	@echo "No application defined - MindEd users: Please configure your project target with the 'Mind Path' -> (right click) 'New application' menu."
 endif
 
 doc: build_doc
-	$(MINDOC) $(sourcePathArg) -S=$(RUNTIME_PATH) -o=$(docOutputDir)
+	@if test ! -x $(MINDOC) && ! (which $(MINDOC) 2>&1)>/dev/null ; \
+	then $(MINDOC) $(sourcePathArg) -S=$(RUNTIME_PATH) -o=$(docOutputDir) ;\
+	fi
 
 # here we reuse the same flags as the common build ones
 test: build_test
