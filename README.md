@@ -8,27 +8,27 @@ Contains :
 mind-violation
 --------------
 
-Executable used to identify *hiden* dependencies between Mind components.
-A dependency is considered *hiden* if it isn't formally explicited in the .adl file of the component.
+Executable used to identify *hidden* dependencies between Mind components.
+A dependency is considered *hidden* if it is not formally explicited in the .adl file of the component.
 
 Usage :
 mind-violation buildFolder
 
 
 Hidden dependencies are extracted from component definitions (not instances).
-Retreiving wich object file belongs to which component definition, is done by reversing the output file naming convention of the compiler.
+Retrieving which object file belongs to which component definition, is done by reversing the output file naming convention of the compiler.
 
 Three files will be created :
 
-1. HidenDependenies.txt
-2. HidenDependencies.dot
-3. HidenDependencies.csv
+1. HiddenDeps.txt
+2. HiddenDeps.gv
+3. HiddenDeps.csv
 
 .txt file describe textually, component by component, external symbols used, or external symbols exported.
 
-.dot file are suitable to be ploted using graphviz tools, components are represented by nodes, and hidden dependencies by directed edge. The explicited dependencies (ADL diagram) are not shown on this diagram.
+.gv files are suitable to be plotted using graphviz tools, components are represented by nodes, and hidden dependencies by directed edge. The explicited dependencies (ADL diagram) are not shown on this diagram.
 
-.csv file export dependencies as a Dependency Structur Matrix in csv format.
+.csv file exports dependencies as a Dependency Structure Matrix in csv format.
 
 
 object-dependencies
@@ -37,5 +37,6 @@ object-dependencies
 Executable used to extract dependencies from legacy C compilation.
 
 Can output :
-1. A .dot file (which is not usable for real life project)
-2. A .csv file suitable to be treated by CAM software (Cambridge Advance Modeling http://www-edc.eng.cam.ac.uk/cam ) for clustering or fragmenting. This representation is especialy usefull to extract implied architecture from legacy code.
+
+1. A .gv file (which is not usable for real life project)
+2. A .csv file suitable to be treated by CAM software (Cambridge Advanced Modeller http://www-edc.eng.cam.ac.uk/cam ) for clustering or fragmenting. This representation is especially useful to extract implied architecture from legacy code.
