@@ -18,7 +18,7 @@
       </affiliation>
     </author>
 
-    <pubdate>19/03/2014</pubdate>
+    <pubdate>2014-08-12</pubdate>
   </bookinfo>
 
   <chapter>
@@ -228,8 +228,8 @@ Available options are :
 
         <para>By default the graph details all symbols used from each module.
         It is possible to extract a simplified view from this graph using the
-        script <code>simplifyDot.awk</code> distributed with the
-        <code>mind4se</code> toolchain. The command <code>simplifyDot.awk
+        script <code>simplifyDot</code> distributed with the
+        <code>mind4se</code> toolchain. The command <code>simplifyDot
         abcde.gv &gt; abcdeSimple.gv</code> will create the following
         graph.</para>
 
@@ -459,13 +459,13 @@ Available options are :
       </example>
 
       <para>The outputs of the program are 3 files :
-      <code>HiddenDeps.dot</code> , <code>HiddenDeps.csv</code> , and
+      <code>HiddenDeps.gv</code>, <code>HiddenDeps.csv</code> and
       <code>HiddenDeps.txt</code> . They all represent hidden dependencies
       between components definition used in the build.</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>HiddenDeps.dot</code> represents hidden dependencies as
+          <para><code>HiddenDeps.gv</code> represents hidden dependencies as
           a graph.</para>
         </listitem>
 
@@ -520,11 +520,11 @@ Available options are :
         <para>To track the hidden dependencies between those components, one
         should run the command <code>mind-violation
         target/Default/binaries/</code>. Three files
-        <code>HiddenDeps.dot</code>, <code>HiddenDeps.csv</code>, and
-        <code>HiddenDeps.txt</code>, will be created in the directory
+        <code>HiddenDeps.gv</code>, <code>HiddenDeps.csv</code> and
+        <code>HiddenDeps.txt</code> will be created in the directory
         <code>target/Default</code></para>
 
-        <para><code>HiddenDeps.dot</code> can be visualized with some layout
+        <para><code>HiddenDeps.gv</code> can be visualized with some layout
         program from <code>graphviz</code> as explained in the previous
         chapter.</para>
 
@@ -680,7 +680,7 @@ Pitch {
       components is a very useful feature, but it often imposes to be able to
       export and import symbols from components. However to be fully reusable,
       a component must NOT rely on such features. An application made of
-      "pure" Mind components, will lead to empty <code>HiddenDeps.dot</code>
+      "pure" Mind components, will lead to empty <code>HiddenDeps.gv</code>
       graph, and <code>HiddenDeps.csv</code> matrix. </para><para> In many
       cases partial re-usability is enough. For example relying on the
       <code>libc</code> seems acceptable in many cases. While developing such

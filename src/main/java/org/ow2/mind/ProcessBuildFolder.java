@@ -96,20 +96,20 @@ public class ProcessBuildFolder {
 	}
 
 	private void dump() {
-		String directory = buildFolder.getParentFile().getPath();
-
+		String outputDirAndFile = buildFolder.getParentFile().getPath()+ File.separatorChar + "HiddenDeps";
+		
 		try {
-			BufferedWriter dot_out = new BufferedWriter(new FileWriter( directory + File.separatorChar + "HidenDeps.dot"));
+			BufferedWriter dot_out = new BufferedWriter(new FileWriter( outputDirAndFile + ".gv"));
 			components.createDotDependencyFile(dot_out);
 			dot_out.flush();
 			dot_out.close();
 
-			BufferedWriter csv_out = new BufferedWriter(new FileWriter( directory + File.separatorChar + "HidenDeps.csv"));
+			BufferedWriter csv_out = new BufferedWriter(new FileWriter( outputDirAndFile + ".csv"));
 			components.createCamCSVFile(csv_out);
 			csv_out.flush();
 			csv_out.close();
 
-			BufferedWriter text_out = new BufferedWriter(new FileWriter( directory + File.separatorChar + "HidenDeps.txt"));
+			BufferedWriter text_out = new BufferedWriter(new FileWriter( outputDirAndFile + ".txt"));
 
 			for (BinaryObject comp : components) {
 				(text_out).newLine();
