@@ -18,7 +18,7 @@
       </affiliation>
     </author>
 
-    <pubdate>19/03/2014</pubdate>
+    <pubdate>2014-08-12</pubdate>
   </bookinfo>
 
   <chapter>
@@ -459,7 +459,7 @@ Available options are :
       </example>
 
       <para>The outputs of the program are 3 files :
-      <code>HiddenDeps.gv</code> , <code>HiddenDeps.csv</code> , and
+      <code>HiddenDeps.gv</code>, <code>HiddenDeps.csv</code> and
       <code>HiddenDeps.txt</code> . They all represent hidden dependencies
       between components definition used in the build.</para>
 
@@ -520,8 +520,8 @@ Available options are :
         <para>To track the hidden dependencies between those components, one
         should run the command <code>mind-violation
         target/Default/binaries/</code>. Three files
-        <code>HiddenDeps.gv</code>, <code>HiddenDeps.csv</code>, and
-        <code>HiddenDeps.txt</code>, will be created in the directory
+        <code>HiddenDeps.gv</code>, <code>HiddenDeps.csv</code> and
+        <code>HiddenDeps.txt</code> will be created in the directory
         <code>target/Default</code></para>
 
         <para><code>HiddenDeps.gv</code> can be visualized with some layout
