@@ -1,12 +1,18 @@
 package org.ow2.mind;
 
-import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
+//import java.io.BufferedReader;
+//import java.io.InputStreamReader;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class NMBinaryComponentSet extends BinaryObjectSet {
 	private static final long serialVersionUID = 1L;
@@ -77,17 +83,30 @@ public class NMBinaryComponentSet extends BinaryObjectSet {
 	}
 	
 	public String[] find(String path, String pattern) throws IOException{
-		String objAbsPath;
-		Runtime runtime = Runtime.getRuntime();
-		Process find;
-		ArrayList<String> files = new ArrayList<String>();
-		String[] findCmd = {"find", path,"-name","*.o"};
-		find = runtime.exec(findCmd);
-		BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
-		while((objAbsPath = input.readLine())!=null) {
-			files.add(objAbsPath);
+		
+		@SuppressWarnings("unchecked")
+		Collection<File> files = FileUtils.listFiles(
+				  new File(path), 
+				  new RegexFileFilter("(.*.\\.o)"), 
+				  DirectoryFileFilter.DIRECTORY
+				);
+		ArrayList<String> stringFiles = new ArrayList<String>();
+		for (File f : files) {
+			stringFiles.add(f.getAbsolutePath());
 		}
-		return files.toArray(new String[files.size()]);
+		return stringFiles.toArray(new String[stringFiles.size()]);
+		
+//		String objAbsPath;
+//		Runtime runtime = Runtime.getRuntime();
+//		Process find;
+//		ArrayList<String> files = new ArrayList<String>();
+//		String[] findCmd = {"find", path,"-name","*.o"};
+//		find = runtime.exec(findCmd);
+//		BufferedReader input = new BufferedReader(new InputStreamReader(find.getInputStream()));
+//		while((objAbsPath = input.readLine())!=null) {
+//			files.add(objAbsPath);
+//		}
+//		return files.toArray(new String[files.size()]);
 	}
 }
 
