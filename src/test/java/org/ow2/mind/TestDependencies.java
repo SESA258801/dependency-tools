@@ -145,4 +145,10 @@ public class TestDependencies {
 		System.out.println(comp2);
 	}
 	
+	@Test(groups = {"checkin"})
+	public void testMindViolation() throws Exception {
+	   String[] args = {"src/test/ressources/MindViolationExample"};
+	   ProcessBuildFolder.main(args);	
+	}
+	
 }
