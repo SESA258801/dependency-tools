@@ -84,7 +84,9 @@ public class NMBinaryComponentSet extends BinaryObjectSet {
 	
 	public String[] find(String path, String pattern) throws IOException{
 		
-		@SuppressWarnings("unchecked")
+		//@SuppressWarnings("unchecked") 
+		// FIXME This breaks the Cobertura version used in CI.
+		// This should be fixed with next mind-parent pom version
 		Collection<File> files = FileUtils.listFiles(
 				  new File(path), 
 				  new RegexFileFilter("(.*.\\.o)"), 
