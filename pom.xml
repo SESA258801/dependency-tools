@@ -80,7 +80,7 @@
                     <execution>
                         <id>copy-docbook-resources</id>
                         <!-- here the phase you need -->
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -104,7 +104,7 @@
                 <executions>
                     <execution>
                         <id>pdf</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-pdf</goal>
                         </goals>
@@ -117,7 +117,7 @@
                     </execution>
                     <execution>
                         <id>html-printable</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>
@@ -132,7 +132,7 @@
                     <!-- User Guide HTML executions -->
                     <execution>
                         <id>userguide-html</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>
@@ -164,7 +164,7 @@
                     </execution>
                     <execution>
                         <id>userguide-html-chunked</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>

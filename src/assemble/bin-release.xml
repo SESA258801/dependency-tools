@@ -24,9 +24,16 @@
             <directory>src/assemble/resources/bin</directory>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
-    <fileSet>
+        <fileSet>
             <directory>src/assemble/resources/dependency-tools-examples</directory>
             <outputDirectory>examples/dependency-tools</outputDirectory>
-    </fileSet>
+        </fileSet>
     </fileSets>
+    <files>
+        <file>
+            <source>target/site/dependency-tools.pdf</source>
+            <fileMode>0644</fileMode>
+            <outputDirectory>doc</outputDirectory>
+        </file>
+    </files>
 </assembly>
