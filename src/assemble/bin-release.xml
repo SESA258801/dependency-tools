@@ -33,7 +33,7 @@
         <file>
             <source>target/site/dependency-tools.pdf</source>
             <fileMode>0644</fileMode>
-            <outputDirectory>doc</outputDirectory>
+            <outputDirectory>examples/dependency-tools</outputDirectory>
         </file>
     </files>
 </assembly>
