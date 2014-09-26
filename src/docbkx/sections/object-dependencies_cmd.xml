@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section[
+<!ENTITY % myents SYSTEM "../shared.ent" >
+%myents;
+]>
+<section xml:id="object-dependency_cmd" xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+  <title>The <command>object-dependencies</command> command</title>
+  <para>The <command>object-dependencies</command> command is used to list dependencies between
+    binary objects files.</para>
+  <para>This command is not based on the analysis of <code>#include</code> in source files, but
+    relies only on dependencies between binary object files. </para>
+  <para> </para>
+  <para>The <command>object-dependencies</command> command has the following syntax :<cmdsynopsis>
+    <command>object-dependencies</command>
+    <arg choice="opt" rep="repeat"><replaceable>OPTIONS</replaceable></arg>
+    <arg choice="req" rep="repeat"><replaceable>objectFiles</replaceable></arg>
+  </cmdsynopsis>
+  </para>
+  <para><replaceable>objectFiles</replaceable> is the list of binary object files to be analysed.</para>
+  <para>Available options are : 
+    <variablelist>
+      <varlistentry>
+        <term><code>[--help|-h]</code></term>
+        <listitem>
+          <para>Print help message and exit.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><code>[--version|-v]</code></term>
+        <listitem>
+          <para>Print version number and exit.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><code>--dsm</code>=<replaceable>file</replaceable></term>
+        <listitem>
+          <para>Output a dependency structure matrix in <code>.csv</code> format to <replaceable>file</replaceable> ('-' for standard output).</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><code>--graph</code>=<replaceable>file</replaceable></term>
+        <listitem>
+          <para>Output a dependency graph in <code>.gv</code> format to <replaceable>file</replaceable> ('-' for standard output).</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><code>[--nm_command|-N]</code>=<replaceable>nmExecutable</replaceable></term>
+        <listitem>
+          <para>Specify the command to invoke a <command>nm</command> like tool (default is
+            <command>nm</command>).</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </para>
+  <para>The output CSV file from the <code>--dsm</code> option is formatted to be used by the
+    "Cambridge Advanced Modeler" (CAM) application. CAM can be downloaded at
+    <link>http://www-edc.eng.cam.ac.uk/cam</link>. This Dependency Structure Matrix (DSM)
+    representation is well suited for large code basis.</para>
+  
+  <para>The output GV file from the <code>--graph</code> option is intended to be used by one of the
+    Graphviz tools. Graphviz can be downloaded at <link>http://www.graphviz.org</link>. This
+    directed graph representation is well suited for small code basis.</para>
+  
+  <para>The <command>object-dependencies</command> command requires the installation of the
+    <command>nm</command> tool. <command>nm</command> can be found in the
+    <filename>binutils</filename> package from the GNU project and <filename>binutils</filename>
+    can be found at <link>http://www.gnu.org/software/binutils/</link> or is probably provided with
+    the <command>gcc</command> tool-chain installation. Some vendors (such as TI for example) also
+    provide nm-like tools as part of their tool-chain, so to use this specific tool, its name (and
+    path) must be provided in the comamnd line with the <code>--nm_command</code> parameter.</para>
+  
+  <para>Each considered object file has to be provided individually to the
+    <command>object-dependencies</command> command. An external command can be used to get the
+    list of files : parse compilation outputs or file system search (like <command>find outputDir
+      -name=*.o</command>, ...).</para>
+</section>

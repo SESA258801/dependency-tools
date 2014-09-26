@@ -13,9 +13,6 @@
             <includes>
                 <include>${project.groupId}:dependency-tools</include>
             </includes>
-            <!--excludes>
-                <exclude>${project.groupId}:fractal-runtime</exclude>
-            </excludes-->
             <fileMode>0644</fileMode>
         </dependencySet>
     </dependencySets>
@@ -23,17 +20,19 @@
         <fileSet>
             <directory>src/assemble/resources/bin</directory>
             <outputDirectory>bin</outputDirectory>
+            <directoryMode>0644</directoryMode>
         </fileSet>
         <fileSet>
-            <directory>src/assemble/resources/dependency-tools-examples</directory>
-            <outputDirectory>examples/dependency-tools</outputDirectory>
+            <directory>src/assemble/resources/examples</directory>
+            <outputDirectory>examples</outputDirectory>
+            <directoryMode>0644</directoryMode>
         </fileSet>
     </fileSets>
     <files>
         <file>
             <source>target/site/dependency-tools.pdf</source>
             <fileMode>0644</fileMode>
-            <outputDirectory>doc</outputDirectory>
+            <outputDirectory>examples/dependency-tools</outputDirectory>
         </file>
     </files>
 </assembly>
