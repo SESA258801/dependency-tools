@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section[
+<!ENTITY % myents SYSTEM "../shared.ent" >
+%myents;
+]>
+<section xml:id="mind-violation_usage" xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+  <title>The <command>mind-violation</command> command</title>
+  <para>The <command>mind-violation</command> command is used to track unexpressed dependencies
+    between Mind components.</para>
+  <para>This command is not based on the analysis of <code>#include</code> in source files, but
+    relies on dependencies between binary object files and checks for direct accesses from a
+    component to another.</para>
+  <para> </para>
+  <para>The <command>mind-violation</command> command has the following syntax :<cmdsynopsis>
+    <command>mind-violation</command>
+    <arg choice="opt" rep="repeat"><replaceable>OPTIONS</replaceable></arg>
+    <arg choice="req" rep="norepeat"><replaceable>buildFolder</replaceable></arg>
+  </cmdsynopsis>
+  </para>
+  <para><replaceable>buildFolder</replaceable> is the folder to be analysed, it is an output folder
+    of a Mind compilation.</para>
+  <para>Available options are : <variablelist>
+    <varlistentry>
+      <term><code>[--help|-h]</code></term>
+      <listitem>
+        <para>Print help message and exit.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><code>[--version|-v]</code></term>
+      <listitem>
+        <para>Print version number and exit.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><code>[--nm_command|-N]</code>=<replaceable>nmExecutable</replaceable></term>
+      <listitem>
+        <para>Specify the command to invoke a <command>nm</command> like tool (default is
+          <command>nm</command>).</para>
+      </listitem>
+    </varlistentry>
+  </variablelist></para>
+  <para>The command generates 3 files : <filename>HiddenDeps.gv</filename>,
+    <filename>HiddenDeps.csv</filename> and <filename>HiddenDeps.txt</filename>. </para>
+  <para>They all represent hidden dependencies between components used in the build.</para>
+  <itemizedlist>
+    <listitem>
+      <para><filename>HiddenDeps.gv</filename> represents hidden dependencies as a graph.</para>
+    </listitem>
+    <listitem>
+      <para><filename>HiddenDeps.csv</filename> represents hidden dependencies as a dependency structure
+        matrix.</para>
+    </listitem>
+    <listitem>
+      <para><filename>HiddenDeps.txt</filename> represents hidden dependencies textually grouped by
+        components.</para>
+    </listitem>
+  </itemizedlist>
+</section>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section[
+<!ENTITY % myents SYSTEM "../shared.ent" >
+%myents;
+]>
+<section xml:id="dependency-tools_aim" xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+      <title>Aim of the <emphasis>&productName;</emphasis></title>
+  <para>Although it is a native feature to describe dependencies between
+    components in the ADL for any Mind application, understanding the
+    implicit dependencies of a legacy C application can be tedious.</para>
+  
+  <para>Some tools exists, based on the hierarchy of <code>#includes</code> in the C files (mostly
+    based on C compilers). But they suffer some caveats: <itemizedlist>
+      <listitem>
+        <para><code>#include</code> are often over-used.</para>
+      </listitem>
+      <listitem>
+        <para><code>#include</code> serve to describe build dependencies such as
+            <code>#define</code> and symbols declarations.</para>
+      </listitem>
+      <listitem>
+        <para>Symbols declarations are not tied to be declared in the corresponding header.</para>
+      </listitem>
+    </itemizedlist></para>
+  
+  <para>In complement to this, the <command>object-dependencies</command> command is provided to collect
+    the symbols dependencies between the binary object files generated during a compilation.</para>
+  <para>Since this command is based on the <command>nm</command> command (or equivalent), it is not
+    specific to Mind and can be used on any object files handled by the <command>nm</command> command (or
+    equivalent).</para>
+  <para/>
+  
+  <para>In some cases, even a Mind application may violate the component approach: <itemizedlist>
+      <listitem>
+        <para>On purpose, as a design rule, to ease reuse of externally provided libraries and
+          services.</para><para>For example : a set of legacy C files are used as source for a component (e.g. OS services)
+          and no interface is provided to expose the functions, to be invoked from source code in
+          other components, the functions are called directly: a C function call is used instead of
+          a Mind CALL(interface, method).</para>
+      </listitem>
+      <listitem>
+        <para>By an unwanted bad implementation of components.</para>
+      </listitem>
+      <listitem>
+        <para>As an intermediate state, while restructuring legacy C code.</para>
+      </listitem>
+    </itemizedlist></para>
+  
+  <para>The <command>mind-violation</command> command is provided to identify those dependencies between
+    components that are not explicited as ADL bindings.</para>
+  
+ 
+    </section>  
