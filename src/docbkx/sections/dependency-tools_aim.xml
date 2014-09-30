@@ -47,7 +47,7 @@
     </itemizedlist></para>
   
   <para>The <command>mind-violation</command> command is provided to identify those dependencies between
-    components that are not explicited as ADL bindings.</para>
+    components that are not shown as ADL bindings.</para>
   
  
     </section>  
