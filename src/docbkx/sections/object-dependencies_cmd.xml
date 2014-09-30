@@ -67,7 +67,7 @@
     can be found at <link>http://www.gnu.org/software/binutils/</link> or is probably provided with
     the <command>gcc</command> tool-chain installation. Some vendors (such as TI for example) also
     provide nm-like tools as part of their tool-chain, so to use this specific tool, its name (and
-    path) must be provided in the comamnd line with the <code>--nm_command</code> parameter.</para>
+    path) must be provided in the command line with the <code>--nm_command</code> parameter.</para>
   
   <para>Each considered object file has to be provided individually to the
     <command>object-dependencies</command> command. An external command can be used to get the

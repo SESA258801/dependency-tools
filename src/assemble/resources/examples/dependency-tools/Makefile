@@ -11,5 +11,5 @@ $(SUBDIRS):
 # To handle the case of $(MAKECMDGOALS) is not empty
 $(MAKECMDGOALS):
 	@for dir in $(SUBDIRS); do \
-        $(MAKE) -C $$dir $(MAKECMDGOALS) || exit $$? ;\
+        $(MAKE) -C $$dir $@ || exit $$? ;\
     done
