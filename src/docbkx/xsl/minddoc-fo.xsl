@@ -7,6 +7,10 @@
 <xsl:import href="urn:docbkx:stylesheet" />
 <xsl:import href="./minddoc-common.xsl" />
 
+<!-- Allow spanning on multiple pages of formal entities -->
+<xsl:attribute-set name="formal.object.properties">
+  <xsl:attribute name="keep-together.within-column">auto</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- Handling of revhistory data for book on verso page -->
 <xsl:template name="book.titlepage.verso">
@@ -52,8 +56,8 @@
 <!-- Customization of programlisting areas -->
 <xsl:attribute-set name="monospace.verbatim.properties"
                    use-attribute-sets="monospace.properties verbatim.properties">
-  <!-- Try to put a block on a single page -->
-  <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+  <!-- Do not force blocks on a single page -->
+  <xsl:attribute name="keep-together.within-column">auto</xsl:attribute>
   <!-- Wrap of long lines -->
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
 </xsl:attribute-set>
@@ -238,4 +242,3 @@
 
 
 </xsl:stylesheet>
-

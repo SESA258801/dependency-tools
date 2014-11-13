@@ -8,17 +8,6 @@
     <title><emphasis>&productName;</emphasis> User Guide</title>
     <revhistory>
       <revision>
-        <revnumber>0.1</revnumber>
-        <date>2014-08-12</date>
-        <author>
-          <personname>
-            <firstname>Julien</firstname>
-            <surname>TOUS</surname>
-          </personname>
-        </author>
-        <revremark>First revision of <emphasis>&productName;</emphasis> User Guide</revremark>
-      </revision>
-      <revision>
         <revnumber>0.2</revnumber>
         <date>2014-09-26</date>
         <author>
@@ -28,6 +17,17 @@
           </personname>
         </author>
         <revremark>Document rework to export parts in MindC and plugins User Guide</revremark>
+      </revision>
+      <revision>
+        <revnumber>0.1</revnumber>
+        <date>2014-08-12</date>
+        <author>
+          <personname>
+            <firstname>Julien</firstname>
+            <surname>TOUS</surname>
+          </personname>
+        </author>
+        <revremark>First revision of <emphasis>&productName;</emphasis> User Guide</revremark>
       </revision>
     </revhistory>
   </info>
@@ -135,15 +135,15 @@
         <para>The Dependency Structure Matrix (DSM) included in the file can be visualized using
           <application>Excel</application> for example:</para><table frame="all">
             <title>Dependency structure matrix</title>
-            <tgroup align="left" cols="8" colsep="1" rowsep="1">
-              <colspec colname=""/>
-              <colspec colname="Hierachy ID"/>
-              <colspec colname="1"/>
-              <colspec colname="2"/>
-              <colspec colname="3"/>
-              <colspec colname="4"/>
-              <colspec colname="5"/>
-              <colspec colname="6"/>
+            <tgroup cols="8" colsep="1" rowsep="1">
+              <colspec colname="" align="left"/>
+              <colspec colname="Hierachy ID" align="center"/>
+              <colspec colname="1" align="center"/>
+              <colspec colname="2" align="center"/>
+              <colspec colname="3" align="center"/>
+              <colspec colname="4" align="center"/>
+              <colspec colname="5" align="center"/>
+              <colspec colname="6" align="center"/>
               <thead>
                 <row>
                   <entry/>
@@ -285,7 +285,7 @@
           <title>Application overview</title>
           <mediaobject>
             <imageobject role="fo">
-              <imagedata align="center" fileref="images/StarWarOverview.svg"
+              <imagedata align="center" fileref="images/StarWarOverview.gv.svg"
                 scale="50"/>
             </imageobject>
           </mediaobject>
@@ -296,27 +296,27 @@
 
 DarthVader, the commander of the DeathStar welcomes his prisoners from the MilleniumFalcon.
 
-Han Solo is getting out the MilleniumFalcon.
+Han Solo gets out of the MilleniumFalcon.
 DarthVader : Go away from me Han Solo !
 Han Solo : Hehe...
 
-Luc is getting out the MilleniumFalcon.
+Luc gets out of the MilleniumFalcon.
 DarthVader : I'm your father Luc !
 Luc : The bright side of the force will rise again DarthVader !
 
-Leia is getting out the MilleniumFalcon.
+Leia gets out of the MilleniumFalcon.
 DarthVader : Go away from me Leia !
 Leia : DarthVader !
 
 But they all escape !
 
-Leia is getting in the MilleniumFalcon.
-Luc is getting in the MilleniumFalcon.
-Han Solo is getting in the MilleniumFalcon.
+Leia gets into the MilleniumFalcon.
+Luc gets into the MilleniumFalcon.
+Han Solo gets into the MilleniumFalcon.
 
-The MilleniumFalcon is taking of !
+The MilleniumFalcon is taking off !
 
-And congratulate each other.
+And they congratulate each other.
 
 Luc : The bright side of the force will rise again Han Solo !
 Han Solo : Hehe...
@@ -341,11 +341,11 @@ Luc : The bright side of the force will rise again Leia !</programlisting>
               <command>dot</command> from the <code>Graphviz</code> package, as explained in the
               previous chapter</para>
             <example>
-              <title>Graph of hidden dependencies in the application.</title>
+              <title>Graph of hidden dependencies in the application</title>
               <mediaobject>
                 <imageobject role="fo">
                   <imagedata align="center"
-                    fileref="images/StarWarHiddenDeps.dot.svg" scale="50"/>
+                    fileref="images/StarWarHiddenDeps.gv.svg" scale="50"/>
                 </imageobject>
               </mediaobject>
             </example>

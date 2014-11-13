@@ -25,7 +25,7 @@ int main(void){
 
 	CALL(milleniumFalcon,takeOff)();
 
-	printf("\nAnd congratulate each other.\n");
+	printf("\nAnd they congratulate each other.\n");
 	for (i=0; i<10; i++) {
 		if (allies[i]!=0) {
 			for (j=i+1; j<10; j++){
