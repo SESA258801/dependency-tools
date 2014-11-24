@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<parent>
 		<groupId>org.ow2.mind</groupId>
 		<artifactId>mind-compiler</artifactId>
-		<version>2.1-SNAPSHOT</version>
+		<version>2.2-SNAPSHOT</version>
 	</parent>
-
+	
+	<name>dependency-tools</name>
+	<description>Tools to deal with dependencies between binary files</description>
+	
 	<artifactId>dependency-tools</artifactId>
 	<packaging>jar</packaging>
-	<name>dependency-tools</name>
-
-	<description>Tools to deal with dependencies between binary files</description>
-
+	
 	<properties>
 		<mind.test.cflags>-g -Wall -Werror -Wredundant-decls -Wunreachable-code
-			-Wstrict-prototypes -Wwrite-strings</mind.test.cflags>
+		-Wstrict-prototypes -Wwrite-strings</mind.test.cflags>
 		<mind.test.compiler>gcc</mind.test.compiler>
 		<mind.test.compiler.gcc4>gcc4</mind.test.compiler.gcc4>
 	</properties>
-
+	
 	<dependencies>
-	    <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.4</version>
-        </dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<version>${project.version}</version>
 			<artifactId>mindc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -72,152 +70,152 @@
 				</executions>
 			</plugin>
 			
-			            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.5</version>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>copy-docbook-resources</id>
-                        <!-- here the phase you need -->
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/site/images</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/docbkx/images</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>pdf</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>generate-pdf</goal>
-                        </goals>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <targetDirectory>${project.build.directory}/site</targetDirectory>
-                            <foCustomization>${basedir}/src/docbkx/xsl/minddoc-fo.xsl</foCustomization>
-                            <draftWatermarkImage>${basedir}/src/docbkx/images/draft.png</draftWatermarkImage>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>html-printable</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>generate-html</goal>
-                        </goals>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <targetDirectory>${project.build.directory}/site/printable</targetDirectory>
-                            <imgSrcPath>../</imgSrcPath>
-                            <htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-html-printable.xsl</htmlCustomization>
-                            <htmlStylesheet>../css/docbook-printable.css</htmlStylesheet>
-                        </configuration>
-                    </execution>
-                    <!-- User Guide HTML executions -->
-                    <execution>
-                        <id>userguide-html</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>generate-html</goal>
-                        </goals>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <includes>dependency-tools.xml</includes>
-                            <targetDirectory>${project.build.directory}/site</targetDirectory>
-                            <htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-html.xsl</htmlCustomization>
-                            <htmlStylesheet>css/docbook.css</htmlStylesheet>
-                            <customizationParameters>
-                                <parameter>
-                                    <name>root.path</name>
-                                    <value>.</value>
-                                </parameter>
-                                <parameter>
-                                    <name>pdf.link</name>
-                                    <value>dependency-tools.pdf</value>
-                                </parameter>
-                                <parameter>
-                                    <name>chunked.link</name>
-                                    <value>userGuide/dependency-tools.html</value>
-                                </parameter>
-                                <parameter>
-                                    <name>printable.link</name>
-                                    <value>printable/dependency-tools.html</value>
-                                </parameter>
-                            </customizationParameters>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>userguide-html-chunked</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>generate-html</goal>
-                        </goals>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <includes>dependency-tools.xml</includes>
-                            <chunkedOutput>true</chunkedOutput>
-                            <targetDirectory>${project.build.directory}/site/userGuide</targetDirectory>
-                            <imgSrcPath>../</imgSrcPath>
-                            <htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-chunk.xsl</htmlCustomization>
-                            <htmlStylesheet>../css/docbook-chunk.css</htmlStylesheet>
-                            <customizationParameters>
-                                <parameter>
-                                    <name>root.path</name>
-                                    <value>..</value>
-                                </parameter>
-                                <parameter>
-                                    <name>pdf.link</name>
-                                    <value>../dependency-tools.pdf</value>
-                                </parameter>
-                                <parameter>
-                                    <name>single.link</name>
-                                    <value>../dependency-tools.html</value>
-                                </parameter>
-                                <parameter>
-                                    <name>printable.link</name>
-                                    <value>../printable/dependency-tools.html</value>
-                                </parameter>
-                            </customizationParameters>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <targetDirectory>${project.build.directory}/site</targetDirectory>
-                    <xslthlConfig>${basedir}/src/docbkx/xsl/xslthl-config.xml</xslthlConfig>
-                    <highlightSource>1</highlightSource>
-                    <xincludeSupported>true</xincludeSupported>
-                </configuration>
-            </plugin>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>copy-docbook-resources</id>
+						<!-- here the phase you need -->
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<outputDirectory>${project.build.directory}/site/images</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/docbkx/images</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>com.agilejava.docbkx</groupId>
+				<artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>pdf</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>generate-pdf</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<targetDirectory>${project.build.directory}/site</targetDirectory>
+							<foCustomization>${basedir}/src/docbkx/xsl/minddoc-fo.xsl</foCustomization>
+							<draftWatermarkImage>${basedir}/src/docbkx/images/draft.png</draftWatermarkImage>
+						</configuration>
+					</execution>
+					<execution>
+						<id>html-printable</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>generate-html</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<targetDirectory>${project.build.directory}/site/printable</targetDirectory>
+							<imgSrcPath>../</imgSrcPath>
+							<htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-html-printable.xsl</htmlCustomization>
+							<htmlStylesheet>../css/docbook-printable.css</htmlStylesheet>
+						</configuration>
+					</execution>
+					<!-- User Guide HTML executions -->
+					<execution>
+						<id>userguide-html</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>generate-html</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<includes>dependency-tools.xml</includes>
+							<targetDirectory>${project.build.directory}/site</targetDirectory>
+							<htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-html.xsl</htmlCustomization>
+							<htmlStylesheet>css/docbook.css</htmlStylesheet>
+							<customizationParameters>
+								<parameter>
+									<name>root.path</name>
+									<value>.</value>
+								</parameter>
+								<parameter>
+									<name>pdf.link</name>
+									<value>dependency-tools.pdf</value>
+								</parameter>
+								<parameter>
+									<name>chunked.link</name>
+									<value>userGuide/dependency-tools.html</value>
+								</parameter>
+								<parameter>
+									<name>printable.link</name>
+									<value>printable/dependency-tools.html</value>
+								</parameter>
+							</customizationParameters>
+						</configuration>
+					</execution>
+					<execution>
+						<id>userguide-html-chunked</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>generate-html</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<includes>dependency-tools.xml</includes>
+							<chunkedOutput>true</chunkedOutput>
+							<targetDirectory>${project.build.directory}/site/userGuide</targetDirectory>
+							<imgSrcPath>../</imgSrcPath>
+							<htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-chunk.xsl</htmlCustomization>
+							<htmlStylesheet>../css/docbook-chunk.css</htmlStylesheet>
+							<customizationParameters>
+								<parameter>
+									<name>root.path</name>
+									<value>..</value>
+								</parameter>
+								<parameter>
+									<name>pdf.link</name>
+									<value>../dependency-tools.pdf</value>
+								</parameter>
+								<parameter>
+									<name>single.link</name>
+									<value>../dependency-tools.html</value>
+								</parameter>
+								<parameter>
+									<name>printable.link</name>
+									<value>../printable/dependency-tools.html</value>
+								</parameter>
+							</customizationParameters>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<targetDirectory>${project.build.directory}/site</targetDirectory>
+					<xslthlConfig>${basedir}/src/docbkx/xsl/xslthl-config.xml</xslthlConfig>
+					<highlightSource>1</highlightSource>
+					<xincludeSupported>true</xincludeSupported>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
+	
 	<profiles>
 		<profile>
 			<id>stdc89</id>
-
+			
 			<activation>
 				<property>
 					<name>allTests</name>
 					<value>true</value>
 				</property>
 			</activation>
-
+			
 			<build>
 				<plugins>
 					<plugin>
@@ -236,7 +234,7 @@
 										<default.file.level>FINEST</default.file.level>
 										<loggers.outfile>${project.build.testOutputDirectory}/test-log-stdc89.txt</loggers.outfile>
 										<mind.test.cflags>-std=c89 -D__MIND_NO_INLINE
-											${mind.test.cflags}</mind.test.cflags>
+										${mind.test.cflags}</mind.test.cflags>
 										<mind.test.compiler>${mind.test.compiler}</mind.test.compiler>
 									</systemPropertyVariables>
 								</configuration>
@@ -246,17 +244,17 @@
 				</plugins>
 			</build>
 		</profile>
-
+		
 		<profile>
 			<id>gcc4</id>
-
+			
 			<activation>
 				<property>
 					<name>allTests</name>
 					<value>true</value>
 				</property>
 			</activation>
-
+			
 			<build>
 				<plugins>
 					<plugin>
